@@ -1,0 +1,9 @@
+<%- include('../partials/desk-open', { heading: 'Bookings', sub: rows.length + ' booking records' }) %>
+<div class="card">
+  <table class="tbl"><thead><tr><th>ID</th><th>Renter</th><th>Property</th><th>Owner</th><th>Move-in</th><th>Requested</th><th>Status</th></tr></thead><tbody>
+  <% rows.forEach(b => { %>
+    <tr><td class="muted-cell">BK-<%= String(b.id).padStart(4, '0') %></td><td><span class="cell-user"><%- H.avatar(b.renter, 24) %><%= b.renter ? b.renter.name : '' %></span></td><td><%= b.property ? b.property.title : 'Deleted' %></td><td><%= b.owner ? b.owner.name : '' %></td><td><%= H.fmtDate(b.moveInDate) %></td><td class="muted-cell"><%= H.fmtDate(b.createdAt) %></td><td><span class="badge <%= H.kind(b.status) %>"><%= b.status %></span></td></tr>
+  <% }) %>
+  </tbody></table>
+</div>
+<%- include('../partials/desk-close') %>

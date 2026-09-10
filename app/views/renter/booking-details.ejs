@@ -1,0 +1,34 @@
+<%- include('../partials/web-open') %>
+<div class="narrow">
+<%- include('../partials/topbar', { heading: 'Booking Details', back: '/bookings' }) %>
+<% const b = booking; const p = b.property; const st = b.status;
+   const steps = [
+     ['Booking request', H.fmtDateTime(b.createdAt), 'done'],
+     st === 'Rejected' ? ['Rejected by owner', (b.decisionReason ? b.decisionReason + ' · ' : '') + H.fmtDate(b.decidedAt), 'done bad'] : ['Owner decision', st === 'Pending' ? 'Waiting for the owner' : 'Accepted ' + H.fmtDate(b.decidedAt), st === 'Pending' ? 'next' : 'done'],
+     st === 'Cancelled' ? ['Cancelled', 'By the ' + (b.cancelledBy || 'renter') + ' · ' + H.fmtDate(b.cancelledAt), 'done bad'] : ['Booking confirmed', 'Room marked as Rented', ['Confirmed','Completed'].includes(st) ? 'done' : ''],
+     ['Move in', H.fmtDate(b.moveInDate), ['Confirmed','Completed'].includes(st) ? (st === 'Confirmed' ? 'next' : 'done') : ''],
+     ['Completed', st === 'Completed' ? H.fmtDate(b.completedAt) + ' · you can leave a review' : 'Leave a review after the rental', st === 'Completed' ? 'done' : ''],
+   ]; %>
+<div class="pad">
+  <div class="ctx-card"><img src="<%= p.photos[0] || '' %>" alt="" onerror="this.style.visibility='hidden'"><div><b><%= p.title %></b><small><%= p.location %></small><small><b><%= H.money(p.monthlyRent) %></b> / month</small></div><span class="badge <%= H.kind(st) %>"><%= st %></span></div>
+  <dl class="kv">
+    <dt>Booking ID</dt><dd>BK-<%= String(b.id).padStart(4, '0') %></dd>
+    <dt>Owner</dt><dd><%- H.avatar(b.owner, 22) %> <%= b.owner ? b.owner.name : '' %></dd>
+    <dt>Move-in date</dt><dd><%= H.fmtDate(b.moveInDate) %></dd>
+    <dt>Rental period</dt><dd><%= b.months %> months</dd>
+    <dt>Monthly rent</dt><dd><%= H.money(p.monthlyRent) %></dd>
+    <% if (b.note) { %><dt>Your note</dt><dd><%= b.note %></dd><% } %>
+  </dl>
+  <h2 class="h2">Progress</h2>
+  <div class="timeline"><% steps.forEach(([t, d, cls], i) => { %><div class="step <%= cls %>"><i><%= i + 1 %></i><div><b><%= t %></b><small><%= d %></small></div></div><% }) %></div>
+  <% if (st === 'Pending') { %><div class="note warn"><%- H.ic('clock', 16) %> The owner has not decided yet. You will get a notification when they accept or reject.</div><% } %>
+  <% if (st === 'Confirmed') { %><div class="note ok"><%- H.ic('check', 16) %> Your booking is confirmed. Contact the owner in Messages to arrange the move-in.</div><% } %>
+  <% if (review) { %><h2 class="h2">Your review</h2><div class="review"><%- H.avatar(user, 36) %><div><div class="rv-head"><b><%= user.name %></b><span class="stars"><%= H.stars(review.rating) %></span></div><p><%= review.comment %></p><small><%= H.ago(review.createdAt) %></small></div></div><% } %>
+  <div class="owner-actions" style="margin-top:16px">
+    <form method="post" action="/rooms/<%= p.id %>/message"><button class="btn outline block" type="submit">Message owner</button></form>
+    <% if (canReview) { %><a class="btn primary block" href="/bookings/<%= b.id %>/review">Leave a review</a><% } %>
+    <% if (['Pending','Confirmed'].includes(st)) { %><form method="post" action="/bookings/<%= b.id %>/cancel" onsubmit="return confirm('Cancel this booking?')"><button class="btn ghost block danger-text" type="submit">Cancel booking</button></form><% } %>
+  </div>
+</div>
+</div>
+<%- include('../partials/web-close') %>

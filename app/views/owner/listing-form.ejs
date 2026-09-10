@@ -1,0 +1,37 @@
+<%- include('../partials/desk-open', { heading: title, sub: 'My Listings / ' + (p.id ? 'Edit' : 'New') }) %>
+<form class="card form-card" method="post" action="<%= p.id ? '/owner/listings/' + p.id : '/owner/listings' %>" enctype="multipart/form-data">
+  <div class="grid-2">
+    <div>
+      <h2 class="h2">Basic Information</h2>
+      <label class="field"><span>Property Title <em>*</em></span><div class="input"><input name="title" value="<%= p.title || '' %>" required placeholder="Modern Studio near BTS"></div></label>
+      <label class="field"><span>Property Type <em>*</em></span><div class="input"><select name="type"><% types.forEach(t => { %><option <%= p.type === t ? 'selected' : '' %>><%= t %></option><% }) %></select><%- H.ic('chevd', 18) %></div></label>
+      <label class="field"><span>Location (area, city) <em>*</em></span><div class="input"><%- H.ic('pin', 18) %><input name="location" value="<%= p.location || '' %>" required placeholder="Phahon Yothin, Bangkok"></div></label>
+      <label class="field"><span>Address</span><div class="input"><input name="address" value="<%= p.address || '' %>" placeholder="123 Phahon Yothin Rd, Chatuchak, Bangkok 10900"></div></label>
+      <div class="grid-2">
+        <label class="field"><span>Monthly Rent (฿) <em>*</em></span><div class="input"><input type="number" name="monthlyRent" value="<%= p.monthlyRent || '' %>" min="0" step="100" required></div></label>
+        <label class="field"><span>Available From</span><div class="input"><%- H.ic('calendar', 18) %><input type="date" name="availableFrom" value="<%= H.dateInput(p.availableFrom) %>"></div></label>
+      </div>
+      <div class="grid-3">
+        <label class="field"><span>Bedrooms</span><div class="input"><input type="number" name="bedrooms" value="<%= p.bedrooms %>" min="0"></div></label>
+        <label class="field"><span>Bathrooms</span><div class="input"><input type="number" name="bathrooms" value="<%= p.bathrooms %>" min="0"></div></label>
+        <label class="field"><span>Size (m²)</span><div class="input"><input type="number" name="sizeSqm" value="<%= p.sizeSqm || '' %>" min="0"></div></label>
+      </div>
+      <label class="field"><span>Description <em>*</em></span><textarea name="description" rows="5" required placeholder="What is the room like? What is nearby?"><%= p.description || '' %></textarea></label>
+    </div>
+    <div>
+      <h2 class="h2">Facilities</h2>
+      <div class="facs"><% facilities.forEach(f => { %><label class="fac"><input type="checkbox" name="facilities" value="<%= f.key %>" <%= (p.facilities || []).includes(f.key) ? 'checked' : '' %>><%- H.ic({ wifi: 'wifi', aircon: 'wind', furnished: 'sofa', parking: 'car', elevator: 'building', security: 'shield', pets: 'heart', gym: 'users', pool: 'area' }[f.key] || 'check', 20) %><span><%= f.label %></span></label><% }) %></div>
+      <h2 class="h2">Photos</h2>
+      <div class="photo-row">
+        <% (p.photos || []).forEach((ph, i) => { %><div class="thumb"><img class="photo" src="<%= ph %>" alt="" onerror="this.classList.add('fallback')"><label title="Untick to remove"><input type="checkbox" name="keepPhotos" value="<%= ph %>" checked></label></div><% }) %>
+        <label class="thumb add"><%- H.ic('upload', 22) %><span>Upload</span><input type="file" name="photos" accept="image/*" multiple hidden></label>
+      </div>
+      <p class="text-sm" style="margin-top:6px">Click a photo to untick it and it will be removed on save. JPG or PNG, up to 5 MB each.</p>
+      <label class="field" style="margin-top:12px"><span>Or paste an image URL</span><div class="input"><%- H.ic('image', 18) %><input name="photoUrl" placeholder="https://..."></div></label>
+      <h2 class="h2">Room Status</h2>
+      <div class="pills"><% statuses.forEach(s => { %><label class="pill <%= p.status === s ? 'on' : '' %>"><input type="radio" name="status" value="<%= s %>" <%= p.status === s ? 'checked' : '' %> hidden><%= s %></label><% }) %></div>
+    </div>
+  </div>
+  <div class="form-foot"><a class="btn ghost" href="/owner/listings">Cancel</a><button class="btn ghost" type="submit" name="action" value="draft">Save as Draft</button><button class="btn primary" type="submit" name="action" value="publish"><%= p.listingStatus === 'published' ? 'Save changes' : 'Publish listing' %></button></div>
+</form>
+<%- include('../partials/desk-close') %>

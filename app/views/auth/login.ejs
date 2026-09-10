@@ -1,0 +1,22 @@
+<%- include('../partials/head', { bodycls: 'web-body' }) %>
+<%- include('../partials/flash') %>
+<div class="auth-wrap">
+  <div class="auth-side"><img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200&q=70" alt="" onerror="this.style.display='none'"><div class="hero-fade"></div>
+    <div class="hero-brand"><span class="logo lg"><%- H.ic('home', 26) %></span><h1>RoomStay</h1><p>Find your perfect room. Live a better tomorrow.</p></div></div>
+  <div class="auth-form"><div>
+    <h1 class="h1">Welcome back</h1><p class="sub">Log in to continue</p>
+    <form method="post" action="/login">
+      <label class="field"><span>Email</span><div class="input"><%- H.ic('mail', 18) %><input type="email" name="email" value="<%= email %>" required autocomplete="email"></div></label>
+      <label class="field"><span>Password</span><div class="input"><%- H.ic('lock', 18) %><input type="password" name="password" required autocomplete="current-password"></div></label>
+      <button class="btn primary block" type="submit">Log In</button>
+    </form>
+    <p class="fine center">New here? <a href="/register">Create an account</a> · <a href="/home">Browse without logging in</a></p>
+    <div class="divider"><span>Demo accounts (password: password123)</span></div>
+    <div class="demo-links">
+      <form method="post" action="/login"><input type="hidden" name="email" value="renter@roomstay.test"><input type="hidden" name="password" value="password123"><button class="btn ghost block">Renter</button></form>
+      <form method="post" action="/login"><input type="hidden" name="email" value="owner@roomstay.test"><input type="hidden" name="password" value="password123"><button class="btn ghost block">Owner</button></form>
+      <form method="post" action="/login"><input type="hidden" name="email" value="admin@roomstay.test"><input type="hidden" name="password" value="password123"><button class="btn ghost block">Admin</button></form>
+    </div>
+  </div></div>
+</div>
+<%- include('../partials/foot') %>

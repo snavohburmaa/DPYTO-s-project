@@ -1,0 +1,26 @@
+<%- include('../partials/desk-open', { heading: 'My Listings', sub: counts.all + ' properties', right: '<a class="btn primary" href="/owner/listings/new">' + H.ic('plus', 16) + ' Add New Listing</a>' }) %>
+<div class="card">
+  <div class="tabs">
+    <% [['all','All'],['published','Published'],['draft','Draft'],['disabled','Disabled']].forEach(([k,l]) => { %><a class="<%= tab === k ? 'on' : '' %>" href="/owner/listings?tab=<%= k %>"><%= l %> (<%= counts[k] %>)</a><% }) %>
+  </div>
+  <% if (!rows.length) { %><div class="empty"><span class="mi"><%- H.ic('building', 24) %></span><b>No listings here</b>Add your first room and renters can find it in search.<br><a class="btn primary sm" style="margin-top:12px" href="/owner/listings/new">Add New Listing</a></div><% } %>
+  <div class="listings">
+  <% rows.forEach(p => { %>
+    <div class="listing">
+      <a class="thumb" href="/rooms/<%= p.id %>"><img class="photo" src="<%= p.photos[0] || '' %>" alt="" onerror="this.classList.add('fallback')"></a>
+      <div class="l-body"><b><%= p.title %></b><small><%= p.location %></small><div class="rc-price"><b><%= H.money(p.monthlyRent) %></b> / month</div>
+        <div class="rc-meta"><span><%- H.ic('bed', 15) %> <%= p.bedrooms %></span><span><%- H.ic('bath', 15) %> <%= p.bathrooms %></span><span><%- H.ic('area', 15) %> <%= p.sizeSqm %> m²</span></div>
+        <small class="muted"><%= p.views || 0 %> views · <%= p.inquiries %> inquiries · <%= p.reviewCount %> reviews</small></div>
+      <div class="l-status"><span class="badge <%= H.kind(p.listingStatus) %>"><%= p.listingStatus %></span>
+        <% if (p.listingStatus === 'disabled') { %><span class="dotb <%= H.kind(p.status) %>"><i></i><%= p.status %></span><small class="muted">Disabled by admin</small><% } else { %>
+        <form class="status-form" method="post" action="/owner/listings/<%= p.id %>/status"><select name="status" onchange="this.form.submit()"><% ['Available','Reserved','Rented','Unavailable'].forEach(s => { %><option <%= p.status === s ? 'selected' : '' %>><%= s %></option><% }) %></select></form>
+        <form class="status-form" method="post" action="/owner/listings/<%= p.id %>/status"><input type="hidden" name="listingStatus" value="<%= p.listingStatus === 'published' ? 'draft' : 'published' %>"><button class="btn ghost xs" type="submit"><%= p.listingStatus === 'published' ? 'Unpublish' : 'Publish' %></button></form>
+        <% } %>
+      </div>
+      <div class="l-actions"><a class="btn ghost sm" href="/owner/listings/<%= p.id %>/edit">Edit</a>
+        <form method="post" action="/owner/listings/<%= p.id %>/delete" onsubmit="return confirm('Delete this listing?')"><button class="iconbtn danger-text" type="submit" aria-label="Delete"><%- H.ic('trash', 18) %></button></form></div>
+    </div>
+  <% }) %>
+  </div>
+</div>
+<%- include('../partials/desk-close') %>

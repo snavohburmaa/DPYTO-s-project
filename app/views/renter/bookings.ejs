@@ -1,0 +1,37 @@
+<%- include('../partials/web-open') %>
+<div class="narrow">
+<% const active = bookings.filter(b => ['Pending','Confirmed'].includes(b.status)); const past = bookings.filter(b => !['Pending','Confirmed'].includes(b.status));
+   const show = { all: bookings, pending: bookings.filter(b => b.status === 'Pending'), viewings: [], completed: bookings.filter(b => b.status === 'Completed') }; %>
+<div class="pad top"><div class="title-row"><h1 class="h1">My Bookings</h1></div>
+  <div class="tabs">
+    <a class="<%= tab === 'all' ? 'on' : '' %>" href="/bookings">All</a>
+    <a class="<%= tab === 'pending' ? 'on' : '' %>" href="/bookings?tab=pending">Pending<% if (show.pending.length) { %> <i class="tab-pip"><%= show.pending.length %></i><% } %></a>
+    <a class="<%= tab === 'viewings' ? 'on' : '' %>" href="/bookings?tab=viewings">Viewings<% if (viewings.length) { %> <i class="tab-pip warn"><%= viewings.length %></i><% } %></a>
+    <a class="<%= tab === 'completed' ? 'on' : '' %>" href="/bookings?tab=completed">Completed</a>
+  </div>
+  <% if (tab === 'all' || tab === 'viewings') { %>
+  <% if (viewings.length) { %><h3 class="h3">Viewing requests</h3><% } %>
+  <% viewings.forEach(v => { let sub = '', right = '<span class="badge ' + H.kind(v.status) + '">' + v.status + '</span>';
+       if (v.status === 'Requested') sub = '<small class="muted">Requested ' + H.fmtDateTime(v.requestedAt) + ' · waiting for owner</small>';
+       if (v.status === 'Confirmed') sub = '<small class="muted">Confirmed for ' + H.fmtDateTime(v.requestedAt) + '</small>';
+       if (v.status === 'Declined') sub = '<small class="muted">Declined: ' + H.esc(v.responseReason || 'no reason given') + '</small>';
+       if (v.status === 'Suggested') sub = '<small class="muted">Owner suggested ' + H.fmtDateTime(v.suggestedAt) + '</small><div class="mini-actions"><form method="post" action="/viewings/' + v.id + '/accept"><button class="btn primary xs">Accept time</button></form><a class="btn ghost xs" href="/viewings/' + v.id + '/rerequest">Another time</a></div>'; %>
+    <%- include('../partials/room-row', { r: v.property, href: '/rooms/' + v.property.id, sub, right }) %>
+  <% }) %>
+  <% if (tab === 'viewings' && !viewings.length) { %><div class="empty"><span class="mi"><%- H.ic('calendar', 24) %></span><b>No viewing requests</b>Open a room and tap Request Viewing.</div><% } %>
+  <% } %>
+  <% if (tab !== 'viewings') { %>
+  <% const list = tab === 'all' ? active : show[tab]; if (list.length) { %><h3 class="h3"><%= tab === 'all' ? 'Active bookings' : tab %></h3><% } %>
+  <% list.forEach(b => { %>
+    <%- include('../partials/room-row', { r: b.property, href: '/bookings/' + b.id, sub: '<small class="muted">Move in ' + H.fmtDate(b.moveInDate) + ' · ' + b.months + ' months</small>', right: '<span class="badge ' + H.kind(b.status) + '">' + b.status + '</span>' }) %>
+  <% }) %>
+  <% if (tab === 'all' && past.length) { %><h3 class="h3">Past bookings</h3>
+    <% past.forEach(b => { const canRev = b.status === 'Completed' && !reviewed.has(b.id); %>
+    <%- include('../partials/room-row', { r: b.property, href: '/bookings/' + b.id, sub: '<small class="muted">' + (b.status === 'Completed' ? 'Stayed from ' + H.fmtDate(b.moveInDate) : b.status + ' on ' + H.fmtDate(b.decidedAt || b.cancelledAt || b.updatedAt)) + '</small>' + (canRev ? '<div class="mini-actions"><span class="btn primary xs">Leave a review</span></div>' : ''), right: '<span class="badge ' + H.kind(b.status) + '">' + b.status + '</span>' }) %>
+    <% }) %>
+  <% } %>
+  <% if (!list.length && !(tab === 'all' && (past.length || viewings.length))) { %><div class="empty"><span class="mi"><%- H.ic('clipboard', 24) %></span><b>Nothing here yet</b>Find a room you like and send a booking request.<br><a class="btn primary sm" style="margin-top:12px" href="/search">Browse rooms</a></div><% } %>
+  <% } %>
+</div>
+</div>
+<%- include('../partials/web-close') %>

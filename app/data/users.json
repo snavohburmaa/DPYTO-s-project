@@ -1,0 +1,73 @@
+[
+  {
+    "id": 1,
+    "name": "Admin User",
+    "email": "admin@roomstay.test",
+    "passwordHash": "$2a$10$1EZfERQYOBfJHzBaJRJIuuw1ruSL139fXJLUhYXECGchXslPpdipO",
+    "role": "admin",
+    "phone": "",
+    "status": "active",
+    "createdAt": "2025-08-06T15:43:24.370Z"
+  },
+  {
+    "id": 2,
+    "name": "Thana Kittipong",
+    "email": "owner@roomstay.test",
+    "passwordHash": "$2a$10$IXIsovTf1.1.wnMERoM2uuTLhYfa27alP6vxcf887GucIeGJTBISe",
+    "role": "owner",
+    "phone": "+66 81 234 5678",
+    "status": "active",
+    "createdAt": "2025-08-26T15:43:24.482Z"
+  },
+  {
+    "id": 3,
+    "name": "Su Yi Nandar",
+    "email": "renter@roomstay.test",
+    "passwordHash": "$2a$10$NNtCb3jNhTyzykPShNHR5.DjBX3zeD/M92m5VShRUn6Q2AuegaeR6",
+    "role": "renter",
+    "phone": "+66 89 000 1111",
+    "status": "active",
+    "createdAt": "2026-05-13T15:43:24.594Z",
+    "updatedAt": "2026-09-10T15:54:04.506Z"
+  },
+  {
+    "id": 4,
+    "name": "Alice Johnson",
+    "email": "alice@roomstay.test",
+    "passwordHash": "$2a$10$bvM1PhRx1aSeztc3vUjTMuSvTILZdzVBpotkYEqYGz3qT.RdHe0nK",
+    "role": "renter",
+    "phone": "",
+    "status": "active",
+    "createdAt": "2026-06-12T15:43:24.704Z"
+  },
+  {
+    "id": 5,
+    "name": "Michael Brown",
+    "email": "michael@roomstay.test",
+    "passwordHash": "$2a$10$UYs9FScJi.exY6nY3E4s8.gnwqXCpf3c238EMIae76mT.xo5832Mq",
+    "role": "renter",
+    "phone": "",
+    "status": "active",
+    "createdAt": "2026-02-22T15:43:24.816Z"
+  },
+  {
+    "id": 6,
+    "name": "Kanya Srisuk",
+    "email": "kanya@roomstay.test",
+    "passwordHash": "$2a$10$ZRKPbh1CMc.VTztQIv6GM.FeQFBUkXQqCGnuDEuvmMRf5v2dMGfgm",
+    "role": "owner",
+    "phone": "+66 82 555 9999",
+    "status": "active",
+    "createdAt": "2025-11-14T15:43:24.926Z"
+  },
+  {
+    "id": 7,
+    "name": "Peter Tan",
+    "email": "peter@roomstay.test",
+    "passwordHash": "$2a$10$nm5MCmhk7FRCq3rael5wOuLjnBDYofqnnyg7fQxAl2X02LKO8Gj6K",
+    "role": "owner",
+    "phone": "",
+    "status": "suspended",
+    "createdAt": "2026-08-01T15:43:25.037Z"
+  }
+]

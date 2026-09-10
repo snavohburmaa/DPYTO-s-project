@@ -1,0 +1,14 @@
+<%- include('../partials/desk-open', { heading: 'Reviews', sub: stats.reviewCount + ' reviews across ' + stats.listings + ' listings' }) %>
+<div class="stats three">
+  <%- include('../partials/stat', { icon: 'star', color: '#22A06B', label: 'Average rating', value: stats.rating || '–', sub: 'From ' + stats.reviewCount + ' reviews' }) %>
+  <%- include('../partials/stat', { icon: 'users', color: '#5B4FE9', label: 'Reviewers', value: stats.reviewCount, sub: 'Completed rentals only' }) %>
+  <%- include('../partials/stat', { icon: 'home', color: '#E39B0E', label: 'Listings', value: stats.listings, sub: stats.published + ' published' }) %>
+</div>
+<div class="card">
+  <% if (!rows.length) { %><div class="empty"><span class="mi"><%- H.ic('star', 24) %></span><b>No reviews yet</b>Reviews appear after a renter completes a stay.</div><% } %>
+  <% rows.forEach(r => { %>
+  <div class="review card-row"><%- H.avatar(r.renter, 40) %><div><div class="rv-head"><b><%= r.renter ? r.renter.name : '' %></b><span class="stars"><%= H.stars(r.rating) %></span></div><small class="muted"><%= r.property ? r.property.title : '' %><%= r.hidden ? ' · hidden by admin' : '' %></small><p><%= r.comment %></p><small><%= H.ago(r.createdAt) %></small></div>
+    <details class="suggest"><summary class="btn ghost xs"><%- H.ic('flag', 13) %> Report</summary><form method="post" action="/report" class="reason-box"><input type="hidden" name="targetType" value="review"><input type="hidden" name="targetId" value="<%= r.id %>"><textarea name="reason" rows="2" placeholder="Why should an admin look at this review?" required></textarea><button class="btn ghost sm" style="margin-top:8px" type="submit">Send</button></form></details></div>
+  <% }) %>
+</div>
+<%- include('../partials/desk-close') %>

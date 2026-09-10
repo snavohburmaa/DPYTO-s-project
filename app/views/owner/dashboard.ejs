@@ -1,0 +1,35 @@
+<%- include('../partials/desk-open', { heading: 'Welcome back, ' + user.name.split(' ')[0], sub: 'Manage your properties, bookings and viewings.', sideBadges: { 'Booking Requests': stats.pendingBookings, 'Viewing Requests': stats.newViewings }, right: '<span class="datebox">' + H.ic('calendar', 16) + '<div><small>Today</small><b>' + H.fmtDate(new Date().toISOString()) + '</b></div></span>' }) %>
+<div class="stats">
+  <%- include('../partials/stat', { icon: 'home', color: '#5B4FE9', label: 'Total Listings', value: stats.listings, sub: stats.published + ' published' }) %>
+  <%- include('../partials/stat', { icon: 'clock', color: '#E39B0E', label: 'Pending Requests', value: stats.pendingBookings + stats.newViewings, sub: stats.pendingBookings + ' bookings, ' + stats.newViewings + ' viewings' }) %>
+  <%- include('../partials/stat', { icon: 'calendar', color: '#3B82F6', label: 'Confirmed Bookings', value: stats.confirmed, sub: 'Rooms currently rented' }) %>
+  <%- include('../partials/stat', { icon: 'star', color: '#22A06B', label: 'Average Rating', value: stats.rating || '–', sub: 'From ' + stats.reviewCount + ' reviews' }) %>
+</div>
+<div class="grid-2 wide-left">
+  <section class="card"><div class="card-head"><h2>Requests waiting for you</h2><a class="link" href="/owner/bookings?tab=pending">View all</a></div>
+    <% if (!recent.length) { %><div class="empty"><b>All caught up</b>New booking and viewing requests will appear here.</div><% } else { %>
+    <table class="tbl"><thead><tr><th>Renter</th><th>Property</th><th>Type</th><th>When</th><th>Action</th></tr></thead><tbody>
+    <% recent.forEach(r => { %>
+      <tr><td><span class="cell-user"><%- H.avatar(r.renter, 28) %><%= r.renter ? r.renter.name : '' %></span></td>
+        <td><span class="cell-room"><img src="<%= r.property.photos[0] || '' %>" alt="" onerror="this.style.visibility='hidden'"><%= r.property.title %></span></td>
+        <td><span class="badge <%= r.kind === 'booking' ? 'warn' : 'info' %>"><%= r.kind === 'booking' ? 'Booking' : 'Viewing' %></span></td>
+        <td class="muted-cell"><%= r.kind === 'booking' ? 'Move in ' + H.fmtDate(r.moveInDate) : H.fmtDateTime(r.requestedAt) %></td>
+        <td class="actions"><a class="btn primary xs" href="<%= r.kind === 'booking' ? '/owner/bookings/' + r.id : '/owner/viewings?tab=new' %>">Review</a></td></tr>
+    <% }) %>
+    </tbody></table><% } %>
+  </section>
+  <section class="card"><div class="card-head"><h2>Rooms Overview</h2></div>
+    <div class="occ"><% stats.byStatus.forEach(s => { %><div class="occ-row"><span class="dotb <%= H.kind(s.status) %>"><i></i><%= s.status %></span><b><%= s.n %></b></div><% }) %></div>
+    <% const total = stats.listings || 1; const col = { Available: '#22A06B', Reserved: '#E39B0E', Rented: '#E0453B', Unavailable: '#B8BDCC' }; %>
+    <div class="bar-stack"><% stats.byStatus.forEach(s => { if (s.n) { %><i style="width:<%= (s.n / total * 100).toFixed(1) %>%;background:<%= col[s.status] %>"></i><% } }) %></div>
+  </section>
+</div>
+<section class="card"><div class="card-head"><h2>Quick Actions</h2></div>
+  <div class="quick">
+    <a href="/owner/listings/new"><span class="mi"><%- H.ic('plus', 20) %></span>Add New Listing</a>
+    <a href="/owner/bookings"><span class="mi"><%- H.ic('clipboard', 20) %></span>Booking Requests</a>
+    <a href="/owner/viewings"><span class="mi"><%- H.ic('calendar', 20) %></span>Viewing Requests</a>
+    <a href="/messages"><span class="mi"><%- H.ic('chat', 20) %></span>Messages</a>
+  </div>
+</section>
+<%- include('../partials/desk-close') %>

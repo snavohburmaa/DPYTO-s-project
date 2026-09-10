@@ -1,0 +1,11 @@
+<%- include('../partials/desk-open', { heading: 'Listings', sub: rows.length + ' listings' }) %>
+<div class="card">
+  <div class="tabs"><% [['all','All'],['published','Published'],['draft','Draft'],['disabled','Disabled']].forEach(([k,l]) => { %><a class="<%= tab === k ? 'on' : '' %>" href="/admin/listings?tab=<%= k %>"><%= l %></a><% }) %></div>
+  <table class="tbl"><thead><tr><th>Property</th><th>Owner</th><th>Rent</th><th>Room status</th><th>Listing</th><th>Reviews</th><th>Action</th></tr></thead><tbody>
+  <% rows.forEach(p => { %>
+    <tr><td><a class="cell-room" href="/rooms/<%= p.id %>"><img src="<%= p.photos[0] || '' %>" alt="" onerror="this.style.visibility='hidden'"><%= p.title %></a></td><td><%= p.owner ? p.owner.name : '' %></td><td><%= H.money(p.monthlyRent) %></td><td><span class="dotb <%= H.kind(p.status) %>"><i></i><%= p.status %></span></td><td><span class="badge <%= H.kind(p.listingStatus) %>"><%= p.listingStatus %></span></td><td class="muted-cell"><%= p.rating || '–' %> (<%= p.reviewCount %>)</td>
+      <td class="actions"><a class="btn ghost xs" href="/rooms/<%= p.id %>">View</a><form class="inline-form" method="post" action="/admin/listings/<%= p.id %>/toggle"><button class="btn ghost xs <%= p.listingStatus === 'disabled' ? '' : 'danger-text' %>" type="submit"><%= p.listingStatus === 'disabled' ? 'Enable' : 'Disable' %></button></form></td></tr>
+  <% }) %>
+  </tbody></table>
+</div>
+<%- include('../partials/desk-close') %>

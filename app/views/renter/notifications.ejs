@@ -1,0 +1,20 @@
+<% const list = `
+  ${notes.length ? '' : '<div class="empty"><span class="mi">' + H.ic('bell', 24) + '</span><b>No notifications</b>Updates about viewings, bookings and messages show here.</div>'}
+  ${notes.map(n => {
+    const kind = /confirmed|approved|agreed|accepted|completed|enabled/i.test(n.title) ? 'ok' : /declined|rejected|cancelled|disabled|not available/i.test(n.title) ? 'bad' : /suggested|request/i.test(n.title) ? 'warn' : 'info';
+    const icon = { ok: 'check', bad: 'x', warn: 'calendar', info: 'chat' }[kind];
+    return '<a class="note-row ' + (n.read ? '' : 'unread') + '" href="' + H.esc(n.link || '#') + '"><span class="mi ' + kind + '">' + H.ic(icon, 16) + '</span><div><b>' + H.esc(n.title) + '</b><p>' + H.esc(n.body) + '</p><small>' + H.ago(n.createdAt) + '</small></div></a>';
+  }).join('')}`;
+  const markAll = unreadNotes ? '<form method="post" action="/notifications/read"><button class="link" type="submit">Mark all as read</button></form>' : ''; %>
+<% if (user.role === 'renter') { %>
+<%- include('../partials/web-open') %>
+<div class="narrow">
+<%- include('../partials/topbar', { heading: 'Notifications', back: '/home', right: markAll }) %>
+<div class="pad"><%- list %></div>
+</div>
+<%- include('../partials/web-close') %>
+<% } else { %>
+<%- include('../partials/desk-open', { heading: 'Notifications', sub: unreadNotes ? unreadNotes + ' unread' : 'All caught up', right: markAll }) %>
+<div class="card" style="max-width:720px"><%- list %></div>
+<%- include('../partials/desk-close') %>
+<% } %>

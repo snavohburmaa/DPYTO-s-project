@@ -1,0 +1,19 @@
+<%- include('../partials/desk-open', { heading: 'Reports', sub: rows.length + ' in this list' }) %>
+<div class="card">
+  <div class="tabs"><% [['Open','Open'],['Reviewed','Reviewed'],['Actioned','Actioned'],['all','All']].forEach(([k,l]) => { %><a class="<%= tab === k ? 'on' : '' %>" href="/admin/reports?tab=<%= k %>"><%= l %></a><% }) %></div>
+  <% if (!rows.length) { %><div class="empty"><b>No reports here</b></div><% } else { %>
+  <table class="tbl"><thead><tr><th>Type</th><th>Target</th><th>Reason</th><th>Reported by</th><th>Date</th><th>Status</th><th>Update</th></tr></thead><tbody>
+  <% rows.forEach(r => { %>
+    <tr><td><span class="badge neutral"><%= r.targetType %></span></td>
+      <td><% if (r.targetType === 'listing' && r.target) { %><a class="link" href="/rooms/<%= r.target.id %>"><%= r.label %></a><% } else if (r.targetType === 'user' && r.target) { %><%= r.label %> <small class="muted">(<%= r.target.role %>)</small><% } else { %><%= r.label %><% } %></td>
+      <td class="muted-cell"><%= r.reason %><% if (r.adminNote) { %><br><small>Admin note: <%= r.adminNote %></small><% } %></td>
+      <td><span class="cell-user"><%- H.avatar(r.reporter, 24) %><%= r.reporter ? r.reporter.name : '' %></span></td><td class="muted-cell"><%= H.fmtDate(r.createdAt) %></td><td><span class="badge <%= H.kind(r.status) %>"><%= r.status %></span></td>
+      <td class="actions"><form class="status-form" method="post" action="/admin/reports/<%= r.id %>/status"><select name="status"><% ['Open','Reviewed','Actioned'].forEach(s => { %><option <%= r.status === s ? 'selected' : '' %>><%= s %></option><% }) %></select><input name="note" placeholder="Note" style="height:32px;border:1px solid var(--line);border-radius:8px;padding:0 8px;font:inherit;width:120px"><button class="btn ghost xs" type="submit">Save</button></form>
+        <% if (r.targetType === 'listing' && r.target) { %><form class="inline-form" method="post" action="/admin/listings/<%= r.target.id %>/toggle"><button class="btn ghost xs danger-text" type="submit" style="margin-top:6px"><%= r.target.listingStatus === 'disabled' ? 'Enable listing' : 'Disable listing' %></button></form><% } %>
+        <% if (r.targetType === 'user' && r.target && r.target.id !== user.id) { %><form class="inline-form" method="post" action="/admin/users/<%= r.target.id %>/toggle"><button class="btn ghost xs danger-text" type="submit" style="margin-top:6px"><%= r.target.status === 'suspended' ? 'Enable user' : 'Suspend user' %></button></form><% } %>
+        <% if (r.targetType === 'review' && r.target) { %><form class="inline-form" method="post" action="/admin/reviews/<%= r.target.id %>/toggle"><button class="btn ghost xs danger-text" type="submit" style="margin-top:6px"><%= r.target.hidden ? 'Show review' : 'Hide review' %></button></form><% } %>
+      </td></tr>
+  <% }) %>
+  </tbody></table><% } %>
+</div>
+<%- include('../partials/desk-close') %>

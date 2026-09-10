@@ -1,0 +1,492 @@
+<title>Condo Rental System Charts</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f6f7f9; --surface:#ffffff; --ink:#1d2430; --muted:#5b6575; --line:#c9d0da;
+  --accent:#0f766e; --accent-soft:#d9f0ec; --warn:#b45309; --warn-soft:#fdebd0; --danger:#b91c1c; --danger-soft:#fbe0e0;
+  --renter:#e8eefb; --owner:#eef3e6; --admin:#f3eaf7;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#151a22; --surface:#1e252f; --ink:#e6eaf0; --muted:#98a3b3; --line:#3a4453;
+    --accent:#2dd4bf; --accent-soft:#12403b; --warn:#f59e0b; --warn-soft:#4a3410; --danger:#f87171; --danger-soft:#4a1d1d;
+    --renter:#243149; --owner:#26331f; --admin:#352a3d;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#151a22; --surface:#1e252f; --ink:#e6eaf0; --muted:#98a3b3; --line:#3a4453;
+  --accent:#2dd4bf; --accent-soft:#12403b; --warn:#f59e0b; --warn-soft:#4a3410; --danger:#f87171; --danger-soft:#4a1d1d;
+  --renter:#243149; --owner:#26331f; --admin:#352a3d;
+}
+body{background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;line-height:1.5}
+main{max-width:1180px;margin:0 auto;padding:40px 24px 80px}
+header{margin-bottom:40px;max-width:68ch}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:30px;font-weight:600;margin:6px 0 10px;text-wrap:balance;line-height:1.2}
+header p{margin:0;color:var(--muted)}
+nav{display:flex;gap:18px;margin-top:18px;font-size:14px}
+nav a{color:var(--accent);text-decoration:none;border-bottom:1px solid transparent}
+nav a:hover,nav a:focus-visible{border-bottom-color:var(--accent);outline:none}
+section{margin-top:48px}
+h2{font-size:20px;font-weight:600;margin:0 0 4px}
+.lede{color:var(--muted);margin:0 0 16px;max-width:68ch}
+figure{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:20px;overflow-x:auto}
+figure svg{display:block;max-width:100%;height:auto;min-width:720px;font-family:"IBM Plex Sans",system-ui,sans-serif;color:var(--ink)}
+figcaption{margin-top:14px;font-size:13.5px;color:var(--muted);max-width:80ch}
+.legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:12px;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:14px;height:14px;border-radius:3px;border:1px solid var(--line);display:inline-block}
+svg .box{fill:var(--surface);stroke:currentColor;stroke-width:1.2}
+svg .lane{fill:none;stroke:var(--line);stroke-width:1;stroke-dasharray:4 4}
+svg .lbl{fill:currentColor;font-size:12.5px}
+svg .lbl-s{fill:var(--muted);font-size:11px}
+svg .mono{font-family:"IBM Plex Mono",monospace;font-size:11.5px;fill:currentColor}
+svg .title{font-size:13px;font-weight:600;fill:currentColor}
+svg .edge{fill:none;stroke:currentColor;stroke-width:1.2}
+svg .edge-acc{fill:none;stroke:var(--accent);stroke-width:1.8}
+svg .edge-warn{fill:none;stroke:var(--warn);stroke-width:1.4;stroke-dasharray:5 3}
+svg .edge-danger{fill:none;stroke:var(--danger);stroke-width:1.4;stroke-dasharray:5 3}
+svg .acc{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+svg .warn{fill:var(--warn-soft);stroke:var(--warn);stroke-width:1.3}
+svg .danger{fill:var(--danger-soft);stroke:var(--danger);stroke-width:1.3}
+svg .renter{fill:var(--renter);stroke:currentColor;stroke-width:1.2}
+svg .owner{fill:var(--owner);stroke:currentColor;stroke-width:1.2}
+svg .admin{fill:var(--admin);stroke:currentColor;stroke-width:1.2}
+svg .store{fill:var(--surface);stroke:currentColor;stroke-width:1.2}
+svg .ent-h{fill:var(--accent-soft)}
+svg .ent{fill:var(--surface);stroke:currentColor;stroke-width:1.2}
+svg .pk{fill:var(--accent);font-weight:500}
+svg .fk{fill:var(--muted)}
+svg .rel{fill:none;stroke:currentColor;stroke-width:1.6}
+table{border-collapse:collapse;font-size:13.5px;margin-top:16px;width:100%}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+td code{font-family:"IBM Plex Mono",monospace;font-size:12.5px}
+</style>
+
+<main>
+<header>
+  <div class="eyebrow">Systems Analysis and Design, semester project</div>
+  <h1>Condo &amp; Apartment Rental System</h1>
+  <p>Three charts drawn from the project plan: how the system is built, how a rental moves from search to confirmed booking, and how the ten proposed tables relate.</p>
+  <nav><a href="#arch">1. Architecture</a><a href="#flow">2. Process flow</a><a href="#db">3. Database</a></nav>
+</header>
+
+<!-- ================= 1. ARCHITECTURE ================= -->
+<section id="arch">
+  <h2>1. System architecture</h2>
+  <p class="lede">A standard three-tier web application. The browser talks to one backend over HTTP. The backend is split into the seven process modules from Diagram 0, all sharing one relational database plus a file store for room photos. Bookings are confirmed directly by the owner, so there is no deposit or payment step in the system.</p>
+  <figure>
+  <svg viewBox="0 0 1100 640" role="img" aria-label="Three-tier architecture: browser clients for renter, owner and admin; a web backend with seven modules and authentication; a relational database and a file store.">
+    <defs>
+      <marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker>
+      <marker id="a1acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker>
+    </defs>
+
+    <!-- Tier labels -->
+    <text x="20" y="34" class="eyebrow-svg lbl-s" style="letter-spacing:.08em;text-transform:uppercase">Presentation tier</text>
+    <text x="20" y="214" class="lbl-s" style="letter-spacing:.08em;text-transform:uppercase">Application tier</text>
+    <text x="20" y="520" class="lbl-s" style="letter-spacing:.08em;text-transform:uppercase">Data tier</text>
+    <line x1="20" y1="196" x2="1080" y2="196" class="lane"/>
+    <line x1="20" y1="502" x2="1080" y2="502" class="lane"/>
+
+    <!-- Clients -->
+    <rect x="130" y="50" width="240" height="110" rx="4" class="renter"/>
+    <text x="250" y="76" text-anchor="middle" class="title">Renter browser</text>
+    <text x="250" y="98" text-anchor="middle" class="lbl-s">Search, room detail, favorites</text>
+    <text x="250" y="116" text-anchor="middle" class="lbl-s">Chat, viewing, booking</text>
+    <text x="250" y="134" text-anchor="middle" class="lbl-s">Booking status, reviews</text>
+
+    <rect x="430" y="50" width="240" height="110" rx="4" class="owner"/>
+    <text x="550" y="76" text-anchor="middle" class="title">Owner browser</text>
+    <text x="550" y="98" text-anchor="middle" class="lbl-s">Listing CRUD, availability</text>
+    <text x="550" y="116" text-anchor="middle" class="lbl-s">Approve viewings and bookings</text>
+    <text x="550" y="134" text-anchor="middle" class="lbl-s">Chat, booking history</text>
+
+    <rect x="730" y="50" width="240" height="110" rx="4" class="admin"/>
+    <text x="850" y="76" text-anchor="middle" class="title">Admin browser</text>
+    <text x="850" y="98" text-anchor="middle" class="lbl-s">Users, listings, reviews</text>
+    <text x="850" y="116" text-anchor="middle" class="lbl-s">Reports, booking oversight</text>
+    <text x="850" y="134" text-anchor="middle" class="lbl-s">Disable content</text>
+
+    <!-- Client to backend -->
+    <path d="M250 160 V228" class="edge" marker-end="url(#a1)"/>
+    <path d="M550 160 V228" class="edge" marker-end="url(#a1)"/>
+    <path d="M850 160 V228" class="edge" marker-end="url(#a1)"/>
+    <text x="560" y="186" text-anchor="middle" class="lbl-s">HTTPS, responsive pages (desktop and mobile)</text>
+
+    <!-- Backend container -->
+    <rect x="130" y="230" width="840" height="250" rx="6" class="box"/>
+    <text x="150" y="254" class="title">Web backend</text>
+
+    <!-- Auth bar -->
+    <rect x="150" y="266" width="800" height="34" rx="3" class="acc"/>
+    <text x="550" y="288" text-anchor="middle" class="lbl">Authentication and role-based access (Renter / Owner / Admin), hashed passwords, session</text>
+
+    <!-- 8 modules, 2 rows of 4 -->
+    <g class="lbl">
+      <rect x="150" y="316" width="190" height="56" rx="3" class="box"/>
+      <text x="245" y="338" text-anchor="middle" class="title">1.0 Users</text>
+      <text x="245" y="356" text-anchor="middle" class="lbl-s">register, login, roles</text>
+
+      <rect x="353" y="316" width="190" height="56" rx="3" class="box"/>
+      <text x="448" y="338" text-anchor="middle" class="title">2.0 Property listings</text>
+      <text x="448" y="356" text-anchor="middle" class="lbl-s">CRUD, photos, status</text>
+
+      <rect x="556" y="316" width="190" height="56" rx="3" class="box"/>
+      <text x="651" y="338" text-anchor="middle" class="title">3.0 Search and view</text>
+      <text x="651" y="356" text-anchor="middle" class="lbl-s">filters, detail, favorites</text>
+
+      <rect x="759" y="316" width="190" height="56" rx="3" class="box"/>
+      <text x="854" y="338" text-anchor="middle" class="title">4.0 Viewing appointments</text>
+      <text x="854" y="356" text-anchor="middle" class="lbl-s">approve / suggest / decline</text>
+
+      <rect x="150" y="384" width="258" height="56" rx="3" class="acc"/>
+      <text x="279" y="406" text-anchor="middle" class="title">5.0 Bookings</text>
+      <text x="279" y="424" text-anchor="middle" class="lbl-s">request, owner accept / reject, room status</text>
+
+      <rect x="421" y="384" width="258" height="56" rx="3" class="box"/>
+      <text x="550" y="406" text-anchor="middle" class="title">6.0 Reviews and reports</text>
+      <text x="550" y="424" text-anchor="middle" class="lbl-s">eligible reviews, moderation</text>
+
+      <rect x="692" y="384" width="258" height="56" rx="3" class="box"/>
+      <text x="821" y="406" text-anchor="middle" class="title">7.0 Messages</text>
+      <text x="821" y="424" text-anchor="middle" class="lbl-s">renter to owner chat</text>
+    </g>
+
+
+    <!-- Backend to data -->
+    <path d="M400 480 V536" class="edge" marker-end="url(#a1)"/>
+    <text x="410" y="512" class="lbl-s">SQL reads / writes</text>
+    <path d="M760 480 V536" class="edge" marker-end="url(#a1)"/>
+    <text x="770" y="512" class="lbl-s">store and serve files</text>
+
+    <!-- Database -->
+    <path d="M230 548 a170 12 0 0 1 340 0 v60 a170 12 0 0 1 -340 0 z" class="store"/>
+    <path d="M230 548 a170 12 0 0 0 340 0" class="edge"/>
+    <text x="400" y="582" text-anchor="middle" class="title">Relational database</text>
+    <text x="400" y="600" text-anchor="middle" class="lbl-s">Users, Properties, Bookings, Reviews, Messages, Reports and 4 more</text>
+
+    <!-- File store -->
+    <rect x="620" y="542" width="290" height="78" rx="4" class="store"/>
+    <text x="765" y="568" text-anchor="middle" class="title">File storage</text>
+    <text x="765" y="586" text-anchor="middle" class="lbl-s">room photos</text>
+    <text x="765" y="602" text-anchor="middle" class="lbl-s">(image path saved in DB)</text>
+
+    <!-- Out of scope -->
+    <rect x="1000" y="230" width="90" height="250" rx="4" class="box" style="stroke-dasharray:4 3;fill:none"/>
+    <text x="1045" y="255" text-anchor="middle" class="lbl-s">Not built</text>
+    <text x="1045" y="290" text-anchor="middle" class="lbl-s">Payment</text>
+    <text x="1045" y="304" text-anchor="middle" class="lbl-s">gateway</text>
+    <text x="1045" y="336" text-anchor="middle" class="lbl-s">Map search</text>
+    <text x="1045" y="368" text-anchor="middle" class="lbl-s">AI recs</text>
+    <text x="1045" y="400" text-anchor="middle" class="lbl-s">Video call</text>
+    <text x="1045" y="432" text-anchor="middle" class="lbl-s">360 tour</text>
+    <text x="1045" y="464" text-anchor="middle" class="lbl-s">(future)</text>
+  </svg>
+  <figcaption>The system handles no money at all. Any payment is arranged between renter and owner outside the platform. The teal Bookings module is where the room status rules live: approve sets the room to Rented, reject or cancel returns it to Available.</figcaption>
+  </figure>
+</section>
+
+<!-- ================= 2. PROCESS FLOW ================= -->
+<section id="flow">
+  <h2>2. Process flow: search to review</h2>
+  <p class="lede">Swimlane view of the core user journey. Rows are the actors, columns are time. The teal path is the happy path from the demo scenario; dashed amber edges loop back, dashed red edges end the request.</p>
+  <figure>
+  <svg viewBox="0 0 1180 600" role="img" aria-label="Swimlane flowchart across Renter, Owner and System lanes, from search through viewing, booking, owner approval, confirmation and review, with decline and reject branches.">
+    <defs>
+      <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker>
+      <marker id="a2acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--accent)"/></marker>
+      <marker id="a2warn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--warn)"/></marker>
+      <marker id="a2dan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--danger)"/></marker>
+    </defs>
+
+    <rect x="90" y="20" width="1070" height="180" rx="4" class="renter" style="stroke:none"/>
+    <rect x="90" y="210" width="1070" height="180" rx="4" class="owner" style="stroke:none"/>
+    <rect x="90" y="400" width="1070" height="180" rx="4" style="fill:var(--surface);stroke:var(--line);stroke-width:1"/>
+    <text x="20" y="115" class="title">Renter</text>
+    <text x="20" y="305" class="title">Owner</text>
+    <text x="20" y="495" class="title">System</text>
+
+    <!-- Renter lane -->
+    <rect x="110" y="70" width="110" height="50" rx="4" class="box"/>
+    <text x="165" y="91" text-anchor="middle" class="lbl">Search and</text>
+    <text x="165" y="107" text-anchor="middle" class="lbl">filter rooms</text>
+    <rect x="250" y="70" width="110" height="50" rx="4" class="box"/>
+    <text x="305" y="91" text-anchor="middle" class="lbl">View room</text>
+    <text x="305" y="107" text-anchor="middle" class="lbl">details</text>
+    <rect x="390" y="70" width="110" height="50" rx="4" class="box"/>
+    <text x="445" y="91" text-anchor="middle" class="lbl">Chat with</text>
+    <text x="445" y="107" text-anchor="middle" class="lbl">owner</text>
+    <rect x="530" y="70" width="110" height="50" rx="4" class="box"/>
+    <text x="585" y="91" text-anchor="middle" class="lbl">Request</text>
+    <text x="585" y="107" text-anchor="middle" class="lbl">viewing</text>
+    <rect x="720" y="70" width="110" height="50" rx="4" class="acc"/>
+    <text x="775" y="91" text-anchor="middle" class="lbl">Submit</text>
+    <text x="775" y="107" text-anchor="middle" class="lbl">booking</text>
+    <rect x="940" y="70" width="110" height="50" rx="4" class="box"/>
+    <text x="995" y="91" text-anchor="middle" class="lbl">Leave</text>
+    <text x="995" y="107" text-anchor="middle" class="lbl">review</text>
+    <path d="M220 95 H248" class="edge" marker-end="url(#a2)"/>
+    <path d="M360 95 H388" class="edge" marker-end="url(#a2)"/>
+    <path d="M500 95 H528" class="edge" marker-end="url(#a2)"/>
+
+    <!-- Owner lane -->
+    <path d="M585 232 L650 282 L585 332 L520 282 Z" class="box"/>
+    <text x="585" y="277" text-anchor="middle" class="lbl">Respond to</text>
+    <text x="585" y="293" text-anchor="middle" class="lbl">viewing</text>
+    <path d="M775 232 L845 282 L775 332 L705 282 Z" class="acc"/>
+    <text x="775" y="277" text-anchor="middle" class="lbl">Approve</text>
+    <text x="775" y="293" text-anchor="middle" class="lbl">booking?</text>
+
+    <!-- System lane -->
+    <rect x="240" y="440" width="120" height="46" rx="4" class="danger"/>
+    <text x="300" y="459" text-anchor="middle" class="lbl">Viewing</text>
+    <text x="300" y="475" text-anchor="middle" class="lbl">Declined</text>
+    <rect x="520" y="440" width="130" height="46" rx="4" class="box"/>
+    <text x="585" y="459" text-anchor="middle" class="lbl">Viewing</text>
+    <text x="585" y="475" text-anchor="middle" class="lbl">Confirmed</text>
+    <rect x="880" y="440" width="110" height="46" rx="4" class="danger"/>
+    <text x="935" y="459" text-anchor="middle" class="lbl">Booking Rejected</text>
+    <text x="935" y="475" text-anchor="middle" class="lbl-s" style="fill:currentColor">room stays Available</text>
+    <rect x="705" y="440" width="140" height="46" rx="4" class="acc"/>
+    <text x="775" y="459" text-anchor="middle" class="lbl">Booking Confirmed</text>
+    <text x="775" y="475" text-anchor="middle" class="lbl-s" style="fill:currentColor">room = Rented</text>
+    <rect x="705" y="520" width="140" height="46" rx="4" class="box"/>
+    <text x="775" y="539" text-anchor="middle" class="lbl">Notify renter,</text>
+    <text x="775" y="555" text-anchor="middle" class="lbl">add to booking history</text>
+
+    <!-- Viewing flow -->
+    <path d="M585 120 V230" class="edge" marker-end="url(#a2)"/>
+    <path d="M585 332 V438" class="edge" marker-end="url(#a2)"/>
+    <text x="596" y="390" class="lbl-s">approve</text>
+    <path d="M650 282 H670 V160 H585 V122" class="edge-warn" marker-end="url(#a2warn)"/>
+    <text x="676" y="142" class="lbl-s">suggest another time,</text>
+    <text x="676" y="156" class="lbl-s">renter agrees or re-requests</text>
+    <path d="M520 282 H300 V438" class="edge-danger" marker-end="url(#a2dan)"/>
+    <text x="330" y="274" class="lbl-s">decline with reason</text>
+
+    <!-- Viewing confirmed to booking -->
+    <path d="M650 463 H680 V50 H775 V68" class="edge-acc" marker-end="url(#a2acc)"/>
+    <text x="690" y="44" class="lbl-s">after viewing agreed</text>
+
+    <!-- Booking flow -->
+    <path d="M775 120 V230" class="edge-acc" marker-end="url(#a2acc)"/>
+    <path d="M775 332 V438" class="edge-acc" marker-end="url(#a2acc)"/>
+    <text x="786" y="390" class="lbl-s">accept</text>
+    <path d="M845 282 H935 V438" class="edge-danger" marker-end="url(#a2dan)"/>
+    <text x="852" y="274" class="lbl-s">reject</text>
+    <path d="M775 486 V518" class="edge-acc" marker-end="url(#a2acc)"/>
+
+    <!-- Confirmed to review -->
+    <path d="M845 543 H1080 V95 H1052" class="edge-acc" marker-end="url(#a2acc)"/>
+    <text x="1088" y="300" class="lbl-s">eligible after</text>
+    <text x="1088" y="314" class="lbl-s">completed rental</text>
+  </svg>
+  <div class="legend">
+    <span><i class="sw" style="background:var(--accent)"></i>happy path (demo scenario)</span>
+    <span><i class="sw" style="background:var(--warn)"></i>loop back: suggest another time</span>
+    <span><i class="sw" style="background:var(--danger)"></i>terminal: declined, rejected</span>
+  </div>
+  <figcaption>The owner's decision on the booking is the confirmation. There is no payment step, so the room becomes Rented as soon as the owner accepts, and the renter can review once the rental is completed.</figcaption>
+  </figure>
+
+  <h2 style="margin-top:36px">2.1 Booking status machine</h2>
+  <p class="lede">States of one Bookings row. The owner drives every transition; the system only updates the room status alongside it.</p>
+  <figure>
+  <svg viewBox="0 0 1100 220" role="img" aria-label="State machine for a booking: Pending, then Confirmed or Rejected, then Completed or Cancelled.">
+    <defs>
+      <marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker>
+      <marker id="a3d" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--danger)"/></marker>
+    </defs>
+    <circle cx="40" cy="70" r="7" fill="currentColor"/>
+    <path d="M47 70 H118" class="edge" marker-end="url(#a3)"/>
+    <text x="83" y="60" text-anchor="middle" class="lbl-s">renter submits</text>
+
+    <rect x="120" y="45" width="140" height="50" rx="25" class="box"/>
+    <text x="190" y="70" text-anchor="middle" class="lbl">Pending</text>
+    <text x="190" y="85" text-anchor="middle" class="lbl-s" style="fill:currentColor">room = Available</text>
+
+    <path d="M260 70 H388" class="edge" marker-end="url(#a3)"/>
+    <text x="324" y="60" text-anchor="middle" class="lbl-s">owner accepts</text>
+
+    <rect x="390" y="45" width="150" height="50" rx="25" class="acc"/>
+    <text x="465" y="70" text-anchor="middle" class="lbl">Confirmed</text>
+    <text x="465" y="85" text-anchor="middle" class="lbl-s" style="fill:currentColor">room = Rented</text>
+
+    <path d="M540 70 H698" class="edge" marker-end="url(#a3)"/>
+    <text x="619" y="60" text-anchor="middle" class="lbl-s">rental period ends</text>
+
+    <rect x="700" y="45" width="150" height="50" rx="25" class="acc"/>
+    <text x="775" y="70" text-anchor="middle" class="lbl">Completed</text>
+    <text x="775" y="85" text-anchor="middle" class="lbl-s" style="fill:currentColor">review allowed</text>
+    <path d="M850 70 H899" class="edge" marker-end="url(#a3)"/>
+    <circle cx="910" cy="70" r="9" fill="none" stroke="currentColor" stroke-width="1.2"/>
+    <circle cx="910" cy="70" r="5" fill="currentColor"/>
+
+    <path d="M190 95 V148" class="edge-danger" marker-end="url(#a3d)"/>
+    <text x="198" y="125" class="lbl-s">owner rejects</text>
+    <rect x="120" y="150" width="140" height="44" rx="22" class="danger"/>
+    <text x="190" y="177" text-anchor="middle" class="lbl">Rejected</text>
+
+    <path d="M465 95 V148" class="edge-danger" marker-end="url(#a3d)"/>
+    <text x="473" y="125" class="lbl-s">owner or renter cancels</text>
+    <rect x="390" y="150" width="150" height="44" rx="22" class="danger"/>
+    <text x="465" y="171" text-anchor="middle" class="lbl">Cancelled</text>
+    <text x="465" y="186" text-anchor="middle" class="lbl-s" style="fill:currentColor">room back to Available</text>
+  </svg>
+  <figcaption>Four live states and two end states. Only Completed unlocks the review button, which is the eligibility rule the testing plan checks.</figcaption>
+  </figure>
+</section>
+
+<!-- ================= 3. DATABASE ================= -->
+<section id="db">
+  <h2>3. Database design (ERD)</h2>
+  <p class="lede">The ten tables from section 7.1, one field per line. Properties sits at the top and fans down to the tables that reference it; Users sits at the bottom and fans up to the tables that reference it. No two lines cross.</p>
+  <figure>
+  <svg viewBox="0 0 1480 900" role="img" aria-label="Entity relationship diagram of ten tables. Properties at the top fans down to Conversations, Favorites, ViewingAppointments, Reviews and Bookings; Users at the bottom fans up to the same tables plus Messages, and links to Properties and Reports; Bookings links to Reviews.">
+    <defs>
+      <marker id="crow" viewBox="0 0 14 14" refX="13" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M1 1 L13 7 L1 13 M1 7 H13" fill="none" stroke="currentColor" stroke-width="1.4"/></marker>
+      <marker id="one" viewBox="0 0 14 14" refX="1" refY="7" markerWidth="14" markerHeight="14" orient="auto"><path d="M5 1 V13" fill="none" stroke="currentColor" stroke-width="1.6"/></marker>
+    </defs>
+<g transform="translate(718,40)">
+<rect width="260" height="216" rx="3" class="ent"/><rect width="260" height="28" rx="3" class="ent-h"/>
+<text x="130" y="19" text-anchor="middle" class="title">Properties</text>
+<text x="10" y="44" class="mono pk">property_id PK</text>
+<text x="10" y="64" class="mono fk">owner_id FK</text>
+<text x="10" y="84" class="mono">title</text>
+<text x="10" y="104" class="mono">location</text>
+<text x="10" y="124" class="mono">room_type</text>
+<text x="10" y="144" class="mono">monthly_rent</text>
+<text x="10" y="164" class="mono">facilities</text>
+<text x="10" y="184" class="mono">description</text>
+<text x="10" y="204" class="mono">status</text>
+</g>
+<g transform="translate(1040,40)">
+<rect width="200" height="96" rx="3" class="ent"/><rect width="200" height="28" rx="3" class="ent-h"/>
+<text x="100" y="19" text-anchor="middle" class="title">PropertyPhotos</text>
+<text x="10" y="44" class="mono pk">photo_id PK</text>
+<text x="10" y="64" class="mono fk">property_id FK</text>
+<text x="10" y="84" class="mono">image_path</text>
+</g>
+<g transform="translate(40,400)">
+<rect width="200" height="176" rx="3" class="ent"/><rect width="200" height="28" rx="3" class="ent-h"/>
+<text x="100" y="19" text-anchor="middle" class="title">Messages</text>
+<text x="10" y="44" class="mono pk">message_id PK</text>
+<text x="10" y="64" class="mono fk">conversation_id FK</text>
+<text x="10" y="84" class="mono fk">sender_id FK</text>
+<text x="10" y="104" class="mono">message_text</text>
+<text x="10" y="124" class="mono">sent_at</text>
+</g>
+<g transform="translate(276,400)">
+<rect width="200" height="176" rx="3" class="ent"/><rect width="200" height="28" rx="3" class="ent-h"/>
+<text x="100" y="19" text-anchor="middle" class="title">Conversations</text>
+<text x="10" y="44" class="mono pk">conversation_id PK</text>
+<text x="10" y="64" class="mono fk">renter_id FK</text>
+<text x="10" y="84" class="mono fk">owner_id FK</text>
+<text x="10" y="104" class="mono fk">property_id FK</text>
+</g>
+<g transform="translate(512,400)">
+<rect width="200" height="176" rx="3" class="ent"/><rect width="200" height="28" rx="3" class="ent-h"/>
+<text x="100" y="19" text-anchor="middle" class="title">Favorites</text>
+<text x="10" y="44" class="mono pk">favorite_id PK</text>
+<text x="10" y="64" class="mono fk">renter_id FK</text>
+<text x="10" y="84" class="mono fk">property_id FK</text>
+</g>
+<g transform="translate(748,400)">
+<rect width="200" height="176" rx="3" class="ent"/><rect width="200" height="28" rx="3" class="ent-h"/>
+<text x="100" y="19" text-anchor="middle" class="title">ViewingAppointments</text>
+<text x="10" y="44" class="mono pk">viewing_id PK</text>
+<text x="10" y="64" class="mono fk">renter_id FK</text>
+<text x="10" y="84" class="mono fk">property_id FK</text>
+<text x="10" y="104" class="mono">requested_datetime</text>
+<text x="10" y="124" class="mono">suggested_datetime</text>
+<text x="10" y="144" class="mono">status</text>
+<text x="10" y="164" class="mono">response_reason</text>
+</g>
+<g transform="translate(984,400)">
+<rect width="200" height="176" rx="3" class="ent"/><rect width="200" height="28" rx="3" class="ent-h"/>
+<text x="100" y="19" text-anchor="middle" class="title">Reviews</text>
+<text x="10" y="44" class="mono pk">review_id PK</text>
+<text x="10" y="64" class="mono fk">booking_id FK</text>
+<text x="10" y="84" class="mono fk">renter_id FK</text>
+<text x="10" y="104" class="mono fk">property_id FK</text>
+<text x="10" y="124" class="mono">rating</text>
+<text x="10" y="144" class="mono">comment</text>
+</g>
+<g transform="translate(1220,400)">
+<rect width="200" height="176" rx="3" class="ent" style="stroke:var(--accent);stroke-width:1.8"/><rect width="200" height="28" rx="3" class="ent-h"/>
+<text x="100" y="19" text-anchor="middle" class="title">Bookings</text>
+<text x="10" y="44" class="mono pk">booking_id PK</text>
+<text x="10" y="64" class="mono fk">renter_id FK</text>
+<text x="10" y="84" class="mono fk">property_id FK</text>
+<text x="10" y="104" class="mono">booking_date</text>
+<text x="10" y="124" class="mono">booking_status</text>
+</g>
+<g transform="translate(728,700)">
+<rect width="240" height="136" rx="3" class="ent"/><rect width="240" height="28" rx="3" class="ent-h"/>
+<text x="120" y="19" text-anchor="middle" class="title">Users</text>
+<text x="10" y="44" class="mono pk">user_id PK</text>
+<text x="10" y="64" class="mono">name</text>
+<text x="10" y="84" class="mono">email</text>
+<text x="10" y="104" class="mono">password_hash</text>
+<text x="10" y="124" class="mono">role</text>
+</g>
+<g transform="translate(1100,700)">
+<rect width="200" height="156" rx="3" class="ent"/><rect width="200" height="28" rx="3" class="ent-h"/>
+<text x="100" y="19" text-anchor="middle" class="title">Reports</text>
+<text x="10" y="44" class="mono pk">report_id PK</text>
+<text x="10" y="64" class="mono fk">reporter_id FK</text>
+<text x="10" y="84" class="mono">target_type</text>
+<text x="10" y="104" class="mono">target_id</text>
+<text x="10" y="124" class="mono">reason</text>
+<text x="10" y="144" class="mono">status</text>
+</g>
+<path d="M748 256 V310 H376 V398" class="rel" marker-start="url(#one)" marker-end="url(#crow)"/>
+<text x="384" y="392" class="lbl-s" text-anchor="start">about</text>
+<path d="M798 256 V350 H612 V398" class="rel" marker-start="url(#one)" marker-end="url(#crow)"/>
+<text x="620" y="392" class="lbl-s" text-anchor="start">saved</text>
+<path d="M848 256 V398" class="rel" marker-start="url(#one)" marker-end="url(#crow)"/>
+<text x="856" y="392" class="lbl-s" text-anchor="start">viewed</text>
+<path d="M898 256 V350 H1084 V398" class="rel" marker-start="url(#one)" marker-end="url(#crow)"/>
+<text x="1092" y="392" class="lbl-s" text-anchor="start">reviewed</text>
+<path d="M948 256 V310 H1320 V398" class="rel" marker-start="url(#one)" marker-end="url(#crow)"/>
+<text x="1328" y="392" class="lbl-s" text-anchor="start">booked</text>
+<path d="M978 100 H1038" class="rel" marker-start="url(#one)" marker-end="url(#crow)"/>
+<text x="990" y="92" class="lbl-s" text-anchor="start">photos</text>
+<path d="M738 700 V680 H140 V578" class="rel" marker-start="url(#one)" marker-end="url(#crow)"/>
+<text x="148" y="592" class="lbl-s" text-anchor="start">sender</text>
+<path d="M775 700 V650 H376 V578" class="rel" marker-start="url(#one)" marker-end="url(#crow)"/>
+<text x="384" y="592" class="lbl-s" text-anchor="start">renter, owner</text>
+<path d="M812 700 V620 H612 V578" class="rel" marker-start="url(#one)" marker-end="url(#crow)"/>
+<text x="620" y="592" class="lbl-s" text-anchor="start">renter</text>
+<path d="M848 700 V578" class="rel" marker-start="url(#one)" marker-end="url(#crow)"/>
+<text x="856" y="592" class="lbl-s" text-anchor="start">renter</text>
+<path d="M885 700 V620 H1084 V578" class="rel" marker-start="url(#one)" marker-end="url(#crow)"/>
+<text x="1092" y="592" class="lbl-s" text-anchor="start">renter</text>
+<path d="M922 700 V650 H1320 V578" class="rel" marker-start="url(#one)" marker-end="url(#crow)"/>
+<text x="1328" y="592" class="lbl-s" text-anchor="start">renter</text>
+<path d="M728 790 H16 V100 H716" class="rel" marker-start="url(#one)" marker-end="url(#crow)"/>
+<text x="710" y="92" class="lbl-s" text-anchor="end">owner</text>
+<path d="M968 740 H1098" class="rel" marker-start="url(#one)" marker-end="url(#crow)"/>
+<text x="1040" y="732" class="lbl-s" text-anchor="start">reporter</text>
+<path d="M276 440 H242" class="rel" marker-start="url(#one)" marker-end="url(#crow)"/>
+<text x="258" y="424" class="lbl-s" text-anchor="start">messages</text>
+<path d="M1220 440 H1186" class="rel" marker-start="url(#one)" marker-end="url(#one)"/>
+<text x="1202" y="424" class="lbl-s" text-anchor="start">1 review</text>
+<g transform="translate(1320,700)"><text x="0" y="14" class="title">Notation</text><path d="M0 40 H60" class="rel" marker-start="url(#one)" marker-end="url(#crow)"/><text x="72" y="44" class="lbl-s">one to many</text><path d="M0 70 H60" class="rel" marker-start="url(#one)" marker-end="url(#one)"/><text x="72" y="74" class="lbl-s">one to one</text><text x="0" y="104" class="mono pk">green = primary key</text><text x="0" y="124" class="mono fk">grey = foreign key</text></g>
+  </svg>
+  <figcaption>Reviews is one-to-one with Bookings so a renter can review each completed rental once. Reports uses a polymorphic target (type plus id) so one table covers both reported users and reported listings.</figcaption>
+  </figure>
+
+  <table>
+    <thead><tr><th>Status column</th><th>Values</th><th>Set by</th></tr></thead>
+    <tbody>
+      <tr><td><code>Properties.status</code></td><td>Available, Reserved, Rented, Unavailable</td><td>Owner (manual), System (on accept, complete, cancel)</td></tr>
+      <tr><td><code>ViewingAppointments.status</code></td><td>Requested, Suggested, Confirmed, Declined</td><td>Owner response, renter agreement</td></tr>
+      <tr><td><code>Bookings.booking_status</code></td><td>Pending, Confirmed, Completed, Rejected, Cancelled</td><td>Owner decisions, rental period end</td></tr>
+      <tr><td><code>Reports.status</code></td><td>Open, Reviewed, Actioned</td><td>Admin</td></tr>
+    </tbody>
+  </table>
+</section>
+</main>

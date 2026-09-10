@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "renterId": 3,
+    "propertyId": 1,
+    "createdAt": "2026-08-31T15:43:25.038Z"
+  },
+  {
+    "id": 2,
+    "renterId": 3,
+    "propertyId": 5,
+    "createdAt": "2026-09-02T15:43:25.038Z"
+  },
+  {
+    "id": 3,
+    "renterId": 3,
+    "propertyId": 6,
+    "createdAt": "2026-09-06T15:43:25.038Z"
+  },
+  {
+    "id": 4,
+    "renterId": 4,
+    "propertyId": 1,
+    "createdAt": "2026-09-07T15:43:25.038Z"
+  }
+]

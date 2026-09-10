@@ -1,0 +1,15 @@
+<a class="roomcard wide" href="/rooms/<%= r.id %>">
+  <div class="thumb">
+    <img class="photo" src="<%= r.photos[0] || '' %>" alt="" loading="lazy" onerror="this.classList.add('fallback')">
+    <% if (r.featured) { %><span class="feat">Featured</span><% } %>
+    <% if (user && user.role === 'renter') { %>
+    <form class="inline-form" method="post" action="/favorites/<%= r.id %>/toggle"><button class="heart <%= favIds.includes(r.id) ? 'on' : '' %>" type="submit" aria-label="Save"><%- H.ic('heart', 18) %></button></form>
+    <% } %>
+  </div>
+  <div class="rc-body">
+    <div class="rc-name"><%= r.title %></div>
+    <div class="rc-area"><%= r.location %></div>
+    <div class="rc-price"><b><%= H.money(r.monthlyRent) %></b> / month</div>
+    <div class="rc-meta"><span><%- H.ic('bed', 15) %> <%= r.bedrooms %></span><span><%- H.ic('bath', 15) %> <%= r.bathrooms %></span><span><%- H.ic('area', 15) %> <%= r.sizeSqm %> m²</span><span class="dotb <%= H.kind(r.status) %>" style="margin-left:auto"><i></i><%= r.status %></span></div>
+  </div>
+</a>

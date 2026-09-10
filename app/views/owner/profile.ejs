@@ -1,0 +1,14 @@
+<%- include('../partials/desk-open', { heading: 'Profile', sub: 'Account' }) %>
+<div class="grid-2">
+  <section class="card center-col"><%- H.avatar(user, 96) %><b class="name"><%= user.name %></b><small><%= user.email %></small><span class="badge info"><%- H.ic('shield', 12) %> Property Owner</span>
+    <dl class="kv"><dt>Member since</dt><dd><%= H.fmtDate(user.createdAt, { month: 'long', year: 'numeric' }) %></dd><dt>Phone</dt><dd><%= user.phone || '–' %></dd><dt>Listings</dt><dd><%= stats.listings %></dd><dt>Rating</dt><dd><%= stats.rating || '–' %> / 5 from <%= stats.reviewCount %> reviews</dd></dl></section>
+  <section class="card"><h2 class="h2" style="margin-top:0">Edit profile</h2>
+    <form method="post" action="/profile">
+      <label class="field"><span>Full name</span><div class="input"><input name="name" value="<%= user.name %>" required></div></label>
+      <label class="field"><span>Phone (shown to renters after a booking is confirmed)</span><div class="input"><input name="phone" value="<%= user.phone || '' %>" placeholder="+66"></div></label>
+      <label class="field"><span>New password (leave empty to keep)</span><div class="input"><%- H.ic('lock', 18) %><input type="password" name="password" minlength="8" autocomplete="new-password"></div></label>
+      <button class="btn primary" type="submit">Save changes</button>
+    </form>
+  </section>
+</div>
+<%- include('../partials/desk-close') %>

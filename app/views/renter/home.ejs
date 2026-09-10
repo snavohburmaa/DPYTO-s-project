@@ -1,0 +1,19 @@
+<%- include('../partials/web-open') %>
+<section class="hero-web">
+  <div>
+    <h1>Find your perfect room.<br>Live a better tomorrow.</h1>
+    <p>Search condos, apartments and rooms across Bangkok, chat with the owner, arrange a viewing and book, all in one place.</p>
+    <form action="/search" method="get" class="searchbox live"><%- H.ic('search', 18) %><input name="q" placeholder="Search by location, university, or keyword"><button class="btn primary sm" type="submit">Search</button></form>
+    <div class="cats">
+      <% [['building','Apartments','Apartment'],['grid','Condos','Condo'],['home','Houses','House'],['bed','Rooms','Room']].forEach(([k,l,t]) => { %>
+      <a class="cat" href="/search?type=<%= t %>"><span class="cat-ic"><%- H.ic(k, 18) %></span><%= l %></a>
+      <% }) %>
+    </div>
+  </div>
+  <img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=900&q=70" alt="" onerror="this.style.display='none'">
+</section>
+<div class="sec-head"><h2>Featured Rooms</h2><a href="/search">See all</a></div>
+<div class="cards-grid"><% featured.forEach(r => { %><%- include('../partials/room-card', { r, favIds }) %><% }) %></div>
+<div class="sec-head"><h2>More rooms</h2><a href="/search">See all</a></div>
+<div class="cards-grid"><% nearby.forEach(r => { %><%- include('../partials/room-card', { r, favIds }) %><% }) %></div>
+<%- include('../partials/web-close') %>

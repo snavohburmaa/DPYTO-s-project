@@ -1,0 +1,31 @@
+[
+  {
+    "id": 1,
+    "reporterId": 4,
+    "targetType": "listing",
+    "targetId": 8,
+    "reason": "Photos do not match the room.",
+    "status": "Open",
+    "createdAt": "2026-09-07T15:43:25.038Z"
+  },
+  {
+    "id": 2,
+    "reporterId": 3,
+    "targetType": "user",
+    "targetId": 7,
+    "reason": "Asked for payment before viewing.",
+    "status": "Open",
+    "createdAt": "2026-09-06T15:43:25.038Z",
+    "adminNote": "",
+    "updatedAt": "2026-09-10T15:46:28.479Z"
+  },
+  {
+    "id": 3,
+    "reporterId": 5,
+    "targetType": "listing",
+    "targetId": 4,
+    "reason": "Listing is outdated.",
+    "status": "Reviewed",
+    "createdAt": "2026-09-04T15:43:25.038Z"
+  }
+]

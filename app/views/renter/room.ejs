@@ -1,0 +1,54 @@
+<%- include('../partials/web-open') %>
+<% const p = property; %>
+<div class="topbar"><a class="iconbtn" href="javascript:history.back()"><%- H.ic('back', 22) %></a><h1><%= p.title %></h1><span class="right"><span class="dotb <%= H.kind(p.status) %>"><i></i><%= p.status %></span></span></div>
+<div class="room-layout">
+  <div>
+    <div class="gallery"><img class="cover" id="mainphoto" src="<%= p.photos[0] || '' %>" alt="" onerror="this.classList.add('fallback')"><span class="counter"><%= p.photos.length %> photo<%= p.photos.length === 1 ? '' : 's' %></span></div>
+    <% if (p.photos.length > 1) { %><div class="gallery-strip"><% p.photos.forEach(ph => { %><img src="<%= ph %>" alt="" onclick="document.getElementById('mainphoto').src=this.src;this.parentElement.querySelectorAll('img').forEach(i=>i.style.outline='');this.style.outline='2px solid var(--primary)'"><% }) %></div><% } %>
+    <div class="rc-area" style="margin-top:16px"><%- H.ic('pin', 14) %> <%= p.address || p.location %></div>
+    <div class="rc-meta lg"><span><%- H.ic('bed', 16) %> <%= p.bedrooms %> Bed</span><span><%- H.ic('bath', 16) %> <%= p.bathrooms %> Bath</span><span><%- H.ic('area', 16) %> <%= p.sizeSqm %> m²</span><span><%- H.ic('calendar', 16) %> Available from <%= H.fmtDate(p.availableFrom) %></span></div>
+    <div class="tags"><span class="tag"><%= p.type %></span><% (p.facilities || []).forEach(f => { %><span class="tag"><%= H.facilityLabel(f) %></span><% }) %></div>
+    <h2 class="h2">Description</h2>
+    <p class="body"><%= p.description %></p>
+    <h2 class="h2">Location</h2>
+    <div class="map-box"><div class="map-grid"></div><span class="map-pin"><%- H.ic('pin', 22) %></span><span class="map-lbl"><%= p.address || p.location %></span></div>
+    <h2 class="h2">Reviews <small class="muted">(<%= p.reviews.length %>)</small></h2>
+    <% if (!p.reviews.length) { %><p class="text-sm">No reviews yet. Reviews come from renters who completed a stay here.</p><% } %>
+    <% p.reviews.forEach(rv => { %>
+    <div class="review"><%- H.avatar(rv.renter, 36) %><div><div class="rv-head"><b><%= rv.renter ? rv.renter.name : 'Renter' %></b><span class="stars"><%= H.stars(rv.rating) %></span></div><p><%= rv.comment %></p><small><%= H.ago(rv.createdAt) %></small></div></div>
+    <% }) %>
+    <% if (user) { %>
+    <details class="suggest"><summary class="report"><%- H.ic('flag', 14) %> Report this listing</summary>
+      <form method="post" action="/report" class="reason-box" style="max-width:480px"><input type="hidden" name="targetType" value="listing"><input type="hidden" name="targetId" value="<%= p.id %>">
+        <textarea name="reason" rows="2" placeholder="What is wrong with this listing?" required></textarea>
+        <button class="btn ghost sm" style="margin-top:8px" type="submit">Send report</button></form>
+    </details>
+    <% } %>
+  </div>
+  <aside class="room-side">
+    <div class="card">
+      <div class="price-lg"><b><%= H.money(p.monthlyRent) %></b> / month</div>
+      <p class="text-sm" style="margin-bottom:14px"><%= p.type %> in <%= p.location %></p>
+      <div class="owner-actions">
+      <% if (!user) { %>
+        <a class="btn primary" href="/login">Log in to request a viewing</a>
+        <a class="btn outline" href="/register">Create an account</a>
+      <% } else if (user.role === 'renter') { %>
+        <% if (p.status === 'Available') { %>
+        <a class="btn primary" href="/rooms/<%= p.id %>/viewing">Request Viewing</a>
+        <a class="btn outline" href="/rooms/<%= p.id %>/book">Book this room</a>
+        <% } else { %><span class="btn ghost" style="pointer-events:none">Not available for booking</span><% } %>
+        <form method="post" action="/rooms/<%= p.id %>/message"><button class="btn ghost block" type="submit"><%- H.ic('chat', 16) %> Message owner</button></form>
+        <form method="post" action="/favorites/<%= p.id %>/toggle"><button class="btn ghost block <%= fav ? 'danger-text' : '' %>" type="submit"><%- H.ic('heart', 16) %> <%= fav ? 'Saved to favorites' : 'Save to favorites' %></button></form>
+      <% } else if (user.id === p.ownerId) { %>
+        <a class="btn primary" href="/owner/listings/<%= p.id %>/edit">Edit this listing</a>
+      <% } else { %>
+        <span class="text-sm">Log in as a renter to book this room.</span>
+      <% } %>
+      </div>
+      <div class="owner-row"><%- H.avatar(p.owner, 44) %><div><b><%= p.owner ? p.owner.name : 'Owner' %></b><small>Member since <%= p.owner ? H.fmtDate(p.owner.createdAt, { month: 'short', year: 'numeric' }) : '' %> · <%- H.ic('star', 12) %> <%= p.rating || '–' %> (<%= p.reviewCount %>)</small></div></div>
+    </div>
+    <div class="note info" style="margin:0"><%- H.ic('shield', 16) %> No payment is taken on RoomStay. The owner confirms your booking, and you arrange the move-in together.</div>
+  </aside>
+</div>
+<%- include('../partials/web-close') %>

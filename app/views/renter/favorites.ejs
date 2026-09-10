@@ -1,0 +1,12 @@
+<%- include('../partials/web-open') %>
+<div class="narrow">
+<div class="pad top"><h1 class="h1">My Favorites</h1>
+  <% if (!rooms.length) { %><div class="empty"><span class="mi"><%- H.ic('heart', 24) %></span><b>No saved rooms</b>Tap the heart on any room to keep it here.<br><a class="btn primary sm" style="margin-top:12px" href="/search">Browse rooms</a></div><% } %>
+  <div class="list">
+  <% rooms.forEach(r => { %>
+    <%- include('../partials/room-row', { r, right: '<form method="post" action="/favorites/' + r.id + '/toggle"><button class="heart on flat" type="submit" aria-label="Remove">' + H.ic('heart', 18) + '</button></form>' }) %>
+  <% }) %>
+  </div>
+</div>
+</div>
+<%- include('../partials/web-close') %>

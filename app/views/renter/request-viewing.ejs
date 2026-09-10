@@ -1,0 +1,22 @@
+<%- include('../partials/web-open') %>
+<div class="narrow">
+<%- include('../partials/topbar', { heading: rerequest ? 'Request another time' : 'Request Viewing', back: rerequest ? '/bookings' : '/rooms/' + property.id }) %>
+<% const today = new Date().toISOString().slice(0, 10); %>
+<form method="post" action="<%= rerequest ? '/viewings/' + rerequest.id + '/rerequest' : '/rooms/' + property.id + '/viewing' %>" style="display:contents">
+<div class="pad">
+  <div class="ctx-card"><img src="<%= property.photos[0] || '' %>" alt="" onerror="this.style.visibility='hidden'"><div><b><%= property.title %></b><small><%= property.location %></small><small><b><%= H.money(property.monthlyRent) %></b> / month</small></div></div>
+  <% if (rerequest && rerequest.suggestedAt) { %><div class="note info"><%- H.ic('clock', 16) %> The owner suggested <%= H.fmtDateTime(rerequest.suggestedAt) %>. Pick a different time below, or go back and accept it.</div><% } %>
+  <div class="grid-2">
+    <label class="field"><span>Date</span><div class="input"><%- H.ic('calendar', 18) %><input type="date" name="date" min="<%= today %>" required></div></label>
+    <label class="field"><span>Time</span><div class="input"><%- H.ic('clock', 18) %><input type="time" name="time" value="14:00" required></div></label>
+  </div>
+  <div class="field"><span>Quick times</span><div class="pills wrap">
+    <% ['10:00','14:00','16:00','18:00'].forEach(t => { %><button type="button" class="pill" onclick="document.querySelector('[name=time]').value='<%= t %>'"><%= t.replace(':00', ':00') %></button><% }) %>
+  </div></div>
+  <% if (!rerequest) { %><label class="field"><span>Message (optional)</span><textarea name="message" rows="3" placeholder="I would like to see the room and know more details."></textarea></label><% } %>
+  <div class="note info"><%- H.ic('clock', 16) %> The owner can approve, suggest another time, or decline with a reason. You will get a notification.</div>
+</div>
+<div class="sticky-cta"><button class="btn primary block" type="submit">Send Request</button></div>
+</form>
+</div>
+<%- include('../partials/web-close') %>

@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "renterId": 3,
+    "propertyId": 1,
+    "ownerId": 2,
+    "requestedAt": "2026-08-29T15:43:25.038Z",
+    "suggestedAt": null,
+    "message": "I would like to see the room this weekend.",
+    "status": "Completed",
+    "responseReason": "",
+    "createdAt": "2026-08-26T15:43:25.038Z"
+  },
+  {
+    "id": 2,
+    "renterId": 3,
+    "propertyId": 5,
+    "ownerId": 2,
+    "requestedAt": "2026-09-14T15:43:25.038Z",
+    "suggestedAt": "2026-09-15T15:43:25.038Z",
+    "message": "",
+    "status": "Suggested",
+    "responseReason": "I am not free on that day.",
+    "createdAt": "2026-09-08T15:43:25.038Z"
+  },
+  {
+    "id": 3,
+    "renterId": 4,
+    "propertyId": 1,
+    "ownerId": 2,
+    "requestedAt": "2026-09-13T15:43:25.038Z",
+    "suggestedAt": null,
+    "message": "Can I bring my partner?",
+    "status": "Requested",
+    "responseReason": "",
+    "createdAt": "2026-09-09T15:43:25.038Z"
+  },
+  {
+    "id": 4,
+    "renterId": 5,
+    "propertyId": 2,
+    "ownerId": 2,
+    "requestedAt": "2026-09-12T15:43:25.038Z",
+    "suggestedAt": null,
+    "message": "",
+    "status": "Confirmed",
+    "responseReason": "",
+    "createdAt": "2026-09-07T15:43:25.038Z"
+  },
+  {
+    "id": 5,
+    "renterId": 3,
+    "propertyId": 6,
+    "ownerId": 6,
+    "requestedAt": "2026-09-04T15:43:25.038Z",
+    "suggestedAt": null,
+    "message": "",
+    "status": "Declined",
+    "responseReason": "The house is being repainted that week.",
+    "createdAt": "2026-09-02T15:43:25.038Z"
+  }
+]

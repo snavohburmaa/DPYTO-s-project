@@ -1,0 +1,24 @@
+<% const c = convo; const other = c.other; const p = c.property; const isOwner = user.role === 'owner';
+   const thread = `
+    <div class="ctx-card"><img src="${p ? (p.photos[0] || '') : ''}" alt="" onerror="this.style.visibility='hidden'"><div><b>${p ? H.esc(p.title) : 'Room removed'}</b><small>${p ? H.esc(p.location) + ' · ' + H.money(p.monthlyRent) + ' / month' : ''}</small></div>${p ? '<a class="btn ghost xs" href="/rooms/' + p.id + '">View room</a>' : ''}</div>`
+   + (msgs.length ? '' : '<div class="day">Say hello to start the conversation</div>')
+   + msgs.map((m, i) => {
+       const day = (i === 0 || H.fmtDate(m.sentAt) !== H.fmtDate(msgs[i-1].sentAt)) ? '<div class="day">' + H.fmtDate(m.sentAt) + '</div>' : '';
+       return day + '<div class="msg ' + (m.senderId === user.id ? 'me' : 'them') + '">' + H.esc(m.text) + '<time>' + H.fmtTime(m.sentAt) + '</time></div>';
+     }).join('');
+   const composer = `<form class="composer" method="post" action="/messages/${c.id}"><input name="text" placeholder="Type a message..." autocomplete="off" required autofocus><button class="sendbtn" type="submit" aria-label="Send">${H.ic('send', 18)}</button></form>`;
+   const side = `<a class="btn ghost sm" href="/messages" style="margin-bottom:12px">${H.ic('back', 16)} All conversations</a>
+     <div class="owner-row">${H.avatar(other, 40)}<div><b>${H.esc(other ? other.name : '')}</b><small>${isOwner ? 'Renter' : 'Property owner'}</small></div></div>`
+     + (p ? '<div class="owner-actions" style="margin-top:12px">' + (isOwner ? '<a class="btn ghost sm" href="/owner/bookings">Booking requests</a><a class="btn ghost sm" href="/owner/viewings">Viewing requests</a>' : '<a class="btn ghost sm" href="/rooms/' + p.id + '/viewing">Request viewing</a><a class="btn ghost sm" href="/rooms/' + p.id + '/book">Book this room</a>') + '</div>' : '');
+   const layout = `<div class="card msg-layout"><div class="msg-list">${side}</div><div class="msg-pane"><header class="chat-head">${H.avatar(other, 40)}<div class="who"><b>${H.esc(other ? other.name : '')}</b><small class="online">${isOwner ? 'Renter' : 'Owner'}</small></div></header><div class="chat" id="thread">${thread}</div>${composer}</div></div>`; %>
+<% if (isOwner) { %>
+<%- include('../partials/desk-open', { heading: 'Messages', sub: 'Conversation with ' + (other ? other.name : '') }) %>
+<%- layout %>
+<%- include('../partials/desk-close') %>
+<% } else { %>
+<%- include('../partials/web-open') %>
+<div class="page-head"><div><h1 class="h1">Messages</h1><p class="sub">Conversation with <%= other ? other.name : '' %></p></div></div>
+<%- layout %>
+<%- include('../partials/web-close') %>
+<% } %>
+<script>var t=document.getElementById('thread');if(t){t.scrollTop=t.scrollHeight;}</script>

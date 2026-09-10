@@ -1,0 +1,12 @@
+<div class="roomrow">
+  <a class="rr-link" href="<%= typeof href !== 'undefined' ? href : '/rooms/' + r.id %>">
+    <div class="thumb sm"><img class="photo" src="<%= (r.photos && r.photos[0]) || '' %>" alt="" loading="lazy" onerror="this.classList.add('fallback')"></div>
+    <div class="rr-body">
+      <div class="rc-name"><%= r.title %></div>
+      <div class="rc-area"><%= r.location %></div>
+      <div class="rc-price"><b><%= H.money(r.monthlyRent) %></b> / month</div>
+    </div>
+  </a>
+  <span class="rr-right"><%- typeof right !== 'undefined' ? right : '' %></span>
+  <% if (typeof sub !== 'undefined' && sub) { %><div class="rr-sub"><%- sub %></div><% } %>
+</div>

@@ -1,0 +1,18 @@
+<%- include('../partials/desk-open', { heading: 'Booking Requests', sub: counts.pending ? counts.pending + ' waiting for your decision' : 'No pending requests', sideBadges: { 'Booking Requests': counts.pending } }) %>
+<div class="card">
+  <div class="tabs"><% [['all','All'],['pending','Pending'],['confirmed','Confirmed'],['history','History']].forEach(([k,l]) => { %><a class="<%= tab === k ? 'on' : '' %>" href="/owner/bookings?tab=<%= k %>"><%= l %><% if (k === 'pending' && counts.pending) { %> <i class="tab-pip"><%= counts.pending %></i><% } %></a><% }) %></div>
+  <% if (!rows.length) { %><div class="empty"><span class="mi"><%- H.ic('clipboard', 24) %></span><b>No bookings in this list</b></div><% } else { %>
+  <table class="tbl"><thead><tr><th>Renter</th><th>Property</th><th>Requested</th><th>Move-in</th><th>Period</th><th>Status</th><th>Action</th></tr></thead><tbody>
+  <% rows.forEach(b => { %>
+    <tr><td><span class="cell-user"><%- H.avatar(b.renter, 28) %><%= b.renter ? b.renter.name : '' %></span></td>
+      <td><span class="cell-room"><img src="<%= b.property.photos[0] || '' %>" alt="" onerror="this.style.visibility='hidden'"><%= b.property.title %></span></td>
+      <td class="muted-cell"><%= H.fmtDate(b.createdAt) %></td><td><%= H.fmtDate(b.moveInDate) %></td><td class="muted-cell"><%= b.months %> months</td>
+      <td><span class="badge <%= H.kind(b.status) %>"><%= b.status %></span></td>
+      <td class="actions">
+        <% if (b.status === 'Pending') { %><form class="inline-form" method="post" action="/owner/bookings/<%= b.id %>/accept"><button class="btn primary xs" type="submit">Accept</button></form><a class="btn ghost xs" href="/owner/bookings/<%= b.id %>">Details</a>
+        <% } else { %><a class="btn ghost xs" href="/owner/bookings/<%= b.id %>">View</a><form class="inline-form" method="post" action="/owner/bookings/<%= b.id %>/message"><button class="btn ghost xs" type="submit">Message</button></form><% } %>
+      </td></tr>
+  <% }) %>
+  </tbody></table><% } %>
+</div>
+<%- include('../partials/desk-close') %>

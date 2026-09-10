@@ -1,0 +1,65 @@
+[
+  {
+    "id": 1,
+    "userId": 3,
+    "title": "Booking confirmed",
+    "body": "Thana Kittipong accepted your booking for Modern Studio.",
+    "link": "/bookings/2",
+    "read": false,
+    "createdAt": "2026-09-06T15:43:25.038Z"
+  },
+  {
+    "id": 2,
+    "userId": 3,
+    "title": "New time suggested",
+    "body": "The owner suggested another time for your Luxury Room viewing.",
+    "link": "/bookings",
+    "read": false,
+    "createdAt": "2026-09-08T15:43:25.038Z"
+  },
+  {
+    "id": 3,
+    "userId": 3,
+    "title": "Viewing declined",
+    "body": "Garden House viewing was declined: the house is being repainted that week.",
+    "link": "/bookings",
+    "read": true,
+    "createdAt": "2026-09-04T15:43:25.038Z"
+  },
+  {
+    "id": 4,
+    "userId": 2,
+    "title": "New booking request",
+    "body": "Su Yi Nandar requested to book Cozy Condo Near BTS.",
+    "link": "/owner/bookings/3",
+    "read": false,
+    "createdAt": "2026-09-09T15:43:25.038Z"
+  },
+  {
+    "id": 5,
+    "userId": 2,
+    "title": "New viewing request",
+    "body": "Alice Johnson requested a viewing for Cozy Condo Near BTS.",
+    "link": "/owner/viewings",
+    "read": false,
+    "createdAt": "2026-09-09T15:43:25.038Z"
+  },
+  {
+    "id": 6,
+    "createdAt": "2026-09-10T15:46:14.012Z",
+    "userId": 7,
+    "title": "Listing enabled",
+    "body": "Riverside Loft was enabled by an admin.",
+    "link": "/owner/listings",
+    "read": false
+  },
+  {
+    "id": 7,
+    "createdAt": "2026-09-10T15:56:53.277Z",
+    "userId": 4,
+    "title": "New message",
+    "body": "Thana Kittipong: hi",
+    "link": "/messages/2",
+    "read": false
+  }
+]

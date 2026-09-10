@@ -1,0 +1,13 @@
+<% const listHtml = (!convos.length ? '<div class="empty"><b>No conversations yet</b>' + (user.role === 'owner' ? 'Renters who message you about a room appear here.' : 'Open a room and click Message owner to ask a question.') + '</div>' : '')
+   + convos.map(c => '<a class="convo" href="/messages/' + c.id + '">' + H.avatar(c.other, 44) + '<div class="cv-body"><div class="cv-top"><b>' + H.esc(c.other ? c.other.name : '') + '</b><time>' + (c.last ? H.ago(c.last.sentAt) : '') + '</time></div><p>' + H.esc((c.property ? c.property.title + ' · ' : '') + (c.last ? c.last.text : 'No messages yet')) + '</p></div>' + (c.unread ? '<span class="count-pip">' + c.unread + '</span>' : '') + '</a>').join('');
+   const pane = '<div class="msg-pane"><div class="empty" style="margin:auto"><span class="mi">' + H.ic('chat', 24) + '</span><b>Pick a conversation</b>Messages open here.</div></div>'; %>
+<% if (user.role === 'owner') { %>
+<%- include('../partials/desk-open', { heading: 'Messages', sub: unreadMessages ? unreadMessages + ' unread' : 'All conversations' }) %>
+<div class="card msg-layout"><div class="msg-list"><%- listHtml %></div><%- pane %></div>
+<%- include('../partials/desk-close') %>
+<% } else { %>
+<%- include('../partials/web-open') %>
+<div class="page-head"><div><h1 class="h1">Messages</h1><p class="sub"><%= unreadMessages ? unreadMessages + ' unread' : 'Your conversations with owners' %></p></div></div>
+<div class="card msg-layout"><div class="msg-list"><%- listHtml %></div><%- pane %></div>
+<%- include('../partials/web-close') %>
+<% } %>

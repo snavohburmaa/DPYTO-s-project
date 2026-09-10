@@ -1,0 +1,35 @@
+<%- include('../partials/desk-open', { heading: 'Viewing Requests', sub: counts.new ? counts.new + ' new request' + (counts.new > 1 ? 's' : '') : 'No new requests', sideBadges: { 'Viewing Requests': counts.new } }) %>
+<% const today = new Date().toISOString().slice(0, 10); %>
+<div class="card">
+  <div class="tabs"><% [['all','All'],['new','New'],['upcoming','Upcoming'],['done','Completed']].forEach(([k,l]) => { %><a class="<%= tab === k ? 'on' : '' %>" href="/owner/viewings?tab=<%= k %>"><%= l %><% if (k === 'new' && counts.new) { %> <i class="tab-pip warn"><%= counts.new %></i><% } %></a><% }) %></div>
+  <% if (!rows.length) { %><div class="empty"><span class="mi"><%- H.ic('calendar', 24) %></span><b>No viewing requests in this list</b></div><% } %>
+  <div class="vr-list">
+  <% rows.forEach(v => { %>
+    <div class="vr">
+      <div class="vr-top"><%- H.avatar(v.renter, 40) %><div><b><%= v.renter ? v.renter.name : '' %></b><small><%= v.property.title %> · <%= v.property.location %></small></div><span class="badge <%= H.kind(v.status) %>"><%= v.status %></span></div>
+      <div class="vr-time"><%- H.ic('calendar', 16) %> <%= H.fmtDateTime(v.requestedAt) %><% if (v.message) { %><small class="muted" style="font-weight:400"> · “<%= v.message %>”</small><% } %></div>
+      <div class="vr-act">
+        <% if (v.status === 'Requested') { %>
+          <form method="post" action="/owner/viewings/<%= v.id %>/approve"><button class="btn primary sm" type="submit"><%- H.ic('check', 14) %> Approve</button></form>
+          <details class="suggest"><summary class="btn ghost sm"><%- H.ic('clock', 14) %> Suggest another time</summary>
+            <form method="post" action="/owner/viewings/<%= v.id %>/suggest" class="suggest-form">
+              <label class="field"><span>Date</span><div class="input"><input type="date" name="date" min="<%= today %>" required></div></label>
+              <label class="field"><span>Time</span><div class="input"><input type="time" name="time" value="14:00" required></div></label>
+              <button class="btn primary sm" type="submit">Send</button>
+              <input type="hidden" name="reason" value="">
+            </form></details>
+          <details class="suggest"><summary class="btn ghost sm danger-text"><%- H.ic('x', 14) %> Decline</summary>
+            <form method="post" action="/owner/viewings/<%= v.id %>/decline" class="reason-box"><textarea name="reason" rows="2" placeholder="Reason for the renter (required)" required></textarea><button class="btn ghost sm danger-text" style="margin-top:8px" type="submit">Confirm decline</button></form></details>
+        <% } else if (v.status === 'Suggested') { %>
+          <small class="muted">You suggested <%= H.fmtDateTime(v.suggestedAt) %>. Waiting for the renter to agree.</small>
+        <% } else if (v.status === 'Confirmed') { %>
+          <form method="post" action="/owner/viewings/<%= v.id %>/complete"><button class="btn ghost sm" type="submit">Mark as completed</button></form>
+        <% } else if (v.status === 'Declined') { %>
+          <small class="muted">Reason sent: <%= v.responseReason || '–' %></small>
+        <% } %>
+      </div>
+    </div>
+  <% }) %>
+  </div>
+</div>
+<%- include('../partials/desk-close') %>

@@ -1,0 +1,50 @@
+<%- include('../partials/desk-open', { heading: 'Booking Details', sub: 'Booking Requests / BK-' + String(booking.id).padStart(4, '0') }) %>
+<% const b = booking; const p = b.property; const st = b.status; %>
+<div class="grid-2 wide-left">
+  <section class="card">
+    <div class="ctx-card lg"><img src="<%= p.photos[0] || '' %>" alt="" onerror="this.style.visibility='hidden'"><div><b><%= p.title %></b><small><%= p.location %></small><small><b><%= H.money(p.monthlyRent) %></b> / month · room is <%= p.status %></small></div><span class="badge <%= H.kind(st) %>"><%= st %></span></div>
+    <dl class="kv two">
+      <dt>Booking ID</dt><dd>BK-<%= String(b.id).padStart(4, '0') %></dd>
+      <dt>Renter</dt><dd><%- H.avatar(b.renter, 22) %> <%= b.renter ? b.renter.name : '' %> <small class="muted"><%= b.renter ? b.renter.email : '' %></small></dd>
+      <dt>Requested on</dt><dd><%= H.fmtDateTime(b.createdAt) %></dd>
+      <dt>Move-in date</dt><dd><%= H.fmtDate(b.moveInDate) %></dd>
+      <dt>Rental period</dt><dd><%= b.months %> months</dd>
+      <dt>Monthly rent</dt><dd><%= H.money(p.monthlyRent) %></dd>
+      <dt>Viewing</dt><dd><%= viewing ? viewing.status + (viewing.requestedAt ? ' · ' + H.fmtDateTime(viewing.requestedAt) : '') : 'No viewing requested' %></dd>
+      <dt>Renter note</dt><dd><%= b.note || '–' %></dd>
+      <% if (b.decisionReason) { %><dt>Reason</dt><dd><%= b.decisionReason %></dd><% } %>
+    </dl>
+    <% if (st === 'Pending') { %>
+      <div class="note warn"><%- H.ic('clock', 16) %> Accepting marks the room as Rented<%= others ? ' and automatically rejects ' + others + ' other pending request' + (others > 1 ? 's' : '') + ' for it' : '' %>.</div>
+      <div class="form-foot start">
+        <form method="post" action="/owner/bookings/<%= b.id %>/accept"><button class="btn primary" type="submit"><%- H.ic('check', 16) %> Accept Booking</button></form>
+        <details class="suggest"><summary class="btn outline danger-text"><%- H.ic('x', 16) %> Reject</summary>
+          <form method="post" action="/owner/bookings/<%= b.id %>/reject" class="reason-box"><textarea name="reason" rows="2" placeholder="Reason for the renter (optional)"></textarea><button class="btn ghost sm danger-text" style="margin-top:8px" type="submit">Confirm reject</button></form></details>
+        <form method="post" action="/owner/bookings/<%= b.id %>/message"><button class="btn ghost" type="submit">Message renter</button></form>
+      </div>
+    <% } else if (st === 'Confirmed') { %>
+      <div class="note ok"><%- H.ic('check', 16) %> Confirmed. When the rental ends, mark it completed so the renter can leave a review and the room becomes Available again.</div>
+      <div class="form-foot start">
+        <form method="post" action="/owner/bookings/<%= b.id %>/complete"><button class="btn primary" type="submit">Mark rental completed</button></form>
+        <form method="post" action="/owner/bookings/<%= b.id %>/message"><button class="btn ghost" type="submit">Message renter</button></form>
+        <form method="post" action="/owner/bookings/<%= b.id %>/cancel" onsubmit="return confirm('Cancel this confirmed booking?')"><button class="btn ghost danger-text" type="submit">Cancel booking</button></form>
+      </div>
+    <% } else { %>
+      <div class="form-foot start"><form method="post" action="/owner/bookings/<%= b.id %>/message"><button class="btn ghost" type="submit">Message renter</button></form><a class="btn ghost" href="/owner/bookings">Back to requests</a></div>
+    <% } %>
+  </section>
+  <section class="card"><div class="card-head"><h2>Timeline</h2></div>
+    <div class="timeline">
+      <div class="step <%= viewing ? 'done' : '' %>"><i>1</i><div><b>Viewing</b><small><%= viewing ? viewing.status : 'Not requested' %></small></div></div>
+      <div class="step done"><i>2</i><div><b>Booking request</b><small><%= H.fmtDateTime(b.createdAt) %></small></div></div>
+      <div class="step <%= st === 'Pending' ? 'next' : 'done' %>"><i>3</i><div><b>Your decision</b><small><%= st === 'Pending' ? 'Accept or reject' : (st === 'Rejected' ? 'Rejected' : 'Accepted') + ' ' + H.fmtDate(b.decidedAt) %></small></div></div>
+      <div class="step <%= ['Confirmed','Completed'].includes(st) ? 'done' : '' %>"><i>4</i><div><b>Confirmed</b><small>Room becomes Rented</small></div></div>
+      <div class="step <%= st === 'Completed' ? 'done' : (st === 'Confirmed' ? 'next' : '') %>"><i>5</i><div><b>Completed</b><small><%= st === 'Completed' ? H.fmtDate(b.completedAt) : 'After the rental period' %></small></div></div>
+    </div>
+    <div class="card-head" style="margin-top:8px"><h2>About the renter</h2></div>
+    <div class="owner-row"><%- H.avatar(b.renter, 44) %><div><b><%= b.renter ? b.renter.name : '' %></b><small>Member since <%= b.renter ? H.fmtDate(b.renter.createdAt, { month: 'short', year: 'numeric' }) : '' %> · <%= renterHistory %> completed rental<%= renterHistory === 1 ? '' : 's' %></small></div></div>
+    <% if (b.renter) { %><details class="suggest" style="margin-top:12px"><summary class="link"><%- H.ic('flag', 13) %> Report this renter</summary>
+      <form method="post" action="/report" class="reason-box"><input type="hidden" name="targetType" value="user"><input type="hidden" name="targetId" value="<%= b.renter.id %>"><textarea name="reason" rows="2" placeholder="What happened?" required></textarea><button class="btn ghost sm" style="margin-top:8px" type="submit">Send report</button></form></details><% } %>
+  </section>
+</div>
+<%- include('../partials/desk-close') %>

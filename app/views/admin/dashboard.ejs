@@ -1,0 +1,19 @@
+<%- include('../partials/desk-open', { heading: 'Admin Dashboard', sub: 'Platform overview', sideBadges: { Reports: stats.openReports } }) %>
+<div class="stats">
+  <%- include('../partials/stat', { icon: 'users', color: '#5B4FE9', label: 'Users', value: stats.users, sub: '+' + stats.newUsers + ' this week' }) %>
+  <%- include('../partials/stat', { icon: 'building', color: '#3B82F6', label: 'Listings', value: stats.listings, sub: stats.published + ' published' }) %>
+  <%- include('../partials/stat', { icon: 'clipboard', color: '#22A06B', label: 'Bookings', value: stats.bookings, sub: stats.confirmed + ' confirmed' }) %>
+  <%- include('../partials/stat', { icon: 'flag', color: '#E0453B', label: 'Open Reports', value: stats.openReports, sub: 'Need review' }) %>
+</div>
+<div class="card"><div class="card-head"><h2>Open Reports</h2><a class="link" href="/admin/reports">View all</a></div>
+  <% if (!reports.length) { %><div class="empty"><b>No open reports</b></div><% } else { %>
+  <table class="tbl"><thead><tr><th>Type</th><th>Target</th><th>Reason</th><th>Reported by</th><th>Date</th><th></th></tr></thead><tbody>
+  <% reports.forEach(r => { %><tr><td><span class="badge neutral"><%= r.targetType %></span></td><td><%= r.label %></td><td class="muted-cell"><%= r.reason %></td><td><span class="cell-user"><%- H.avatar(r.reporter, 24) %><%= r.reporter ? r.reporter.name : '' %></span></td><td class="muted-cell"><%= H.fmtDate(r.createdAt) %></td><td class="actions"><a class="btn ghost xs" href="/admin/reports">Review</a></td></tr><% }) %>
+  </tbody></table><% } %>
+</div>
+<div class="card"><div class="card-head"><h2>Recent Users</h2><a class="link" href="/admin/users">View all</a></div>
+  <table class="tbl"><thead><tr><th>User</th><th>Email</th><th>Role</th><th>Joined</th><th>Status</th></tr></thead><tbody>
+  <% users.forEach(u => { %><tr><td><span class="cell-user"><%- H.avatar(u, 28) %><%= u.name %></span></td><td class="muted-cell"><%= u.email %></td><td><span class="badge <%= u.role === 'owner' ? 'info' : u.role === 'admin' ? 'warn' : 'neutral' %>"><%= u.role %></span></td><td class="muted-cell"><%= H.fmtDate(u.createdAt) %></td><td><span class="badge <%= H.kind(u.status) %>"><%= u.status %></span></td></tr><% }) %>
+  </tbody></table>
+</div>
+<%- include('../partials/desk-close') %>

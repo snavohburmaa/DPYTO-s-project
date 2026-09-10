@@ -1,0 +1,6 @@
+<% if (flash && (flash.ok.length || flash.error.length)) { %>
+<div class="flash" data-flash>
+  <% flash.ok.forEach(m => { %><div class="ok"><%- H.ic('check', 16) %><span><%= m %></span></div><% }) %>
+  <% flash.error.forEach(m => { %><div class="error"><%- H.ic('alert', 16) %><span><%= m %></span></div><% }) %>
+</div>
+<% } %>

@@ -1,0 +1,11 @@
+<%- include('../partials/desk-open', { heading: 'Users', sub: rows.length + ' accounts', right: '<form method="get" action="/admin/users" class="searchbox live sm">' + H.ic('search', 16) + '<input name="q" value="' + H.esc(q) + '" placeholder="Search users"><input type="hidden" name="tab" value="' + H.esc(tab) + '"></form>' }) %>
+<div class="card">
+  <div class="tabs"><% [['all','All'],['renter','Renters'],['owner','Owners'],['admin','Admins'],['suspended','Suspended']].forEach(([k,l]) => { %><a class="<%= tab === k ? 'on' : '' %>" href="/admin/users?tab=<%= k %>"><%= l %></a><% }) %></div>
+  <table class="tbl"><thead><tr><th>User</th><th>Email</th><th>Role</th><th>Joined</th><th>Status</th><th>Action</th></tr></thead><tbody>
+  <% rows.forEach(u => { %>
+    <tr><td><span class="cell-user"><%- H.avatar(u, 28) %><%= u.name %></span></td><td class="muted-cell"><%= u.email %></td><td><span class="badge <%= u.role === 'owner' ? 'info' : u.role === 'admin' ? 'warn' : 'neutral' %>"><%= u.role %></span></td><td class="muted-cell"><%= H.fmtDate(u.createdAt) %></td><td><span class="badge <%= H.kind(u.status) %>"><%= u.status %></span></td>
+      <td class="actions"><% if (u.id !== user.id) { %><form class="inline-form" method="post" action="/admin/users/<%= u.id %>/toggle"><button class="btn ghost xs <%= u.status === 'suspended' ? '' : 'danger-text' %>" type="submit"><%= u.status === 'suspended' ? 'Enable' : 'Suspend' %></button></form><% } else { %><span class="muted-cell">You</span><% } %></td></tr>
+  <% }) %>
+  </tbody></table>
+</div>
+<%- include('../partials/desk-close') %>

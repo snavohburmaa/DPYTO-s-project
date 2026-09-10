@@ -1,0 +1,24 @@
+<%- include('../partials/web-open') %>
+<div class="narrow">
+<div class="pad top">
+  <div class="prof-head"><%- H.avatar(user, 56) %><div><b><%= user.name %></b><small><%= user.email %></small><small class="muted"><%= user.role.charAt(0).toUpperCase() + user.role.slice(1) %></small></div></div>
+  <% if (user.role === 'renter') { %>
+  <div class="menu">
+    <% [['clipboard','My Bookings','/bookings'],['heart','My Favorites','/favorites'],['chat','My Messages','/messages'],['bell','Notifications','/notifications']].forEach(([k,l,h]) => { %>
+    <a class="menu-row" href="<%= h %>"><span class="mi"><%- H.ic(k, 18) %></span><%= l %><%- H.ic('chev', 18, 'chev') %></a>
+    <% }) %>
+  </div>
+  <% } else { %><a class="menu-row" href="<%= user.role === 'admin' ? '/admin' : '/owner' %>"><span class="mi"><%- H.ic('grid', 18) %></span>Back to dashboard<%- H.ic('chev', 18, 'chev') %></a><% } %>
+  <details class="suggest" style="margin-top:16px"><summary class="menu-row"><span class="mi"><%- H.ic('settings', 18) %></span>Edit profile<%- H.ic('chevd', 18, 'chev') %></summary>
+    <form method="post" action="/profile" style="padding:12px 4px">
+      <label class="field"><span>Full name</span><div class="input"><input name="name" value="<%= user.name %>" required></div></label>
+      <label class="field"><span>Phone</span><div class="input"><input name="phone" value="<%= user.phone || '' %>" placeholder="+66"></div></label>
+      <label class="field"><span>New password (leave empty to keep)</span><div class="input"><%- H.ic('lock', 18) %><input type="password" name="password" minlength="8" autocomplete="new-password"></div></label>
+      <button class="btn primary block" type="submit">Save changes</button>
+    </form>
+  </details>
+  <% if (user.role === 'renter') { %><a class="partner-card" href="/register"><span class="mi"><%- H.ic('building', 18) %></span><div><b>Have a room to rent out?</b><small>Create an owner account to list it</small></div><%- H.ic('chev', 18, 'chev') %></a><% } %>
+  <form method="post" action="/logout"><button class="menu-row danger" type="submit" style="width:100%"><span class="mi" style="background:var(--bad-bg);color:var(--bad)"><%- H.ic('logout', 18) %></span>Log out</button></form>
+</div>
+</div>
+<%- include('../partials/web-close') %>

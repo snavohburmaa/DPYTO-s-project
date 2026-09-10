@@ -1,0 +1,43 @@
+<%- include('../partials/web-open') %>
+<% const active = ['type','min','max','bedrooms','availability'].filter(k => q[k] && q[k] !== 'All' && q[k] !== 'Any').length + (q.facilities || []).length; %>
+<div class="search-layout">
+  <form class="filters" method="get" action="/search">
+    <h2>Filters <a class="link" href="/search">Reset</a></h2>
+    <label class="field"><span>Location or keyword</span><div class="input"><%- H.ic('pin', 18) %><input name="q" value="<%= q.q || '' %>" placeholder="Ari, Bangkok"></div></label>
+    <div class="grid-2">
+      <label class="field"><span>Min rent (฿)</span><div class="input"><input type="number" name="min" value="<%= q.min || '' %>" placeholder="3,000" min="0" step="500"></div></label>
+      <label class="field"><span>Max rent (฿)</span><div class="input"><input type="number" name="max" value="<%= q.max || '' %>" placeholder="50,000" min="0" step="500"></div></label>
+    </div>
+    <div class="field"><span>Room type</span><div class="pills">
+      <% ['All', ...types].forEach(t => { %><label class="pill <%= (q.type || 'All') === t ? 'on' : '' %>"><input type="radio" name="type" value="<%= t %>" <%= (q.type || 'All') === t ? 'checked' : '' %> hidden><%= t %></label><% }) %>
+    </div></div>
+    <div class="field"><span>Bedrooms</span><div class="pills">
+      <% ['Any','1','2','3+'].forEach(t => { %><label class="pill <%= (q.bedrooms || 'Any') === t ? 'on' : '' %>"><input type="radio" name="bedrooms" value="<%= t %>" <%= (q.bedrooms || 'Any') === t ? 'checked' : '' %> hidden><%= t %></label><% }) %>
+    </div></div>
+    <div class="field"><span>Facilities</span><div class="checklist">
+      <% facilities.forEach(f => { %><label class="check"><input type="checkbox" name="facilities" value="<%= f.key %>" <%= q.facilities.includes(f.key) ? 'checked' : '' %>><span><%= f.label %></span></label><% }) %>
+    </div></div>
+    <div class="field"><span>Availability</span><div class="pills">
+      <label class="pill <%= q.availability === 'now' ? 'on' : '' %>"><input type="radio" name="availability" value="now" <%= q.availability === 'now' ? 'checked' : '' %> hidden>Available now</label>
+      <label class="pill <%= q.availability !== 'now' ? 'on' : '' %>"><input type="radio" name="availability" value="" <%= q.availability !== 'now' ? 'checked' : '' %> hidden>Any status</label>
+    </div></div>
+    <input type="hidden" name="sort" value="<%= q.sort || 'newest' %>">
+    <button class="btn primary block" type="submit">Apply filters</button>
+  </form>
+  <div>
+    <div class="results-head">
+      <p class="count"><b><%= results.length %></b> room<%= results.length === 1 ? '' : 's' %> found<%= active ? ', ' + active + ' filter' + (active > 1 ? 's' : '') + ' on' : '' %></p>
+      <form method="get" action="/search">
+        <% Object.entries(q).forEach(([k,v]) => { if (k === 'sort') return; [].concat(v).forEach(x => { if (x) { %><input type="hidden" name="<%= k %>" value="<%= x %>"><% } }) }) %>
+        <select class="sortsel" name="sort" onchange="this.form.submit()">
+          <option value="newest" <%= (q.sort || 'newest') === 'newest' ? 'selected' : '' %>>Sort: newest</option>
+          <option value="price_asc" <%= q.sort === 'price_asc' ? 'selected' : '' %>>Sort: price low to high</option>
+          <option value="price_desc" <%= q.sort === 'price_desc' ? 'selected' : '' %>>Sort: price high to low</option>
+        </select>
+      </form>
+    </div>
+    <% if (!results.length) { %><div class="empty"><span class="mi"><%- H.ic('search', 24) %></span><b>No rooms match</b>Try fewer filters or another area. <a class="link" href="/search">Clear filters</a></div><% } %>
+    <div class="cards-grid" style="grid-template-columns:repeat(2,1fr)"><% results.forEach(r => { %><%- include('../partials/room-card', { r, favIds }) %><% }) %></div>
+  </div>
+</div>
+<%- include('../partials/web-close') %>

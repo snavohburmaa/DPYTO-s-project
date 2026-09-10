@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "bookingId": 1,
+    "renterId": 3,
+    "propertyId": 3,
+    "rating": 5,
+    "comment": "The room is clean and comfortable. The owner is very kind and responsive. Highly recommend!",
+    "hidden": false,
+    "createdAt": "2026-08-23T15:43:25.038Z"
+  },
+  {
+    "id": 2,
+    "bookingId": 6,
+    "renterId": 4,
+    "propertyId": 1,
+    "rating": 4,
+    "comment": "Good value. Wi-Fi is fast. Slightly noisy on weekends.",
+    "hidden": false,
+    "createdAt": "2026-08-11T15:43:25.038Z"
+  }
+]

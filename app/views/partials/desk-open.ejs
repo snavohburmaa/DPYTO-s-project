@@ -1,0 +1,25 @@
+<%- include('head') %>
+<%- include('flash') %>
+<div class="desk">
+<aside class="side">
+  <div class="logo-row"><span class="logo"><%- H.ic('home', 22) %></span><div><b>RoomStay</b><small><%= user.role === 'admin' ? 'Admin' : 'Owner Partner' %></small></div></div>
+  <nav class="sidenav">
+  <% const items = user.role === 'admin'
+      ? [['grid','Dashboard','/admin'],['users','Users','/admin/users'],['building','Listings','/admin/listings'],['clipboard','Bookings','/admin/bookings'],['star','Reviews','/admin/reviews'],['flag','Reports','/admin/reports']]
+      : [['grid','Dashboard','/owner'],['building','My Listings','/owner/listings'],['clipboard','Booking Requests','/owner/bookings'],['calendar','Viewing Requests','/owner/viewings'],['chat','Messages','/messages'],['star','Reviews','/owner/reviews'],['user','Profile','/owner/profile']];
+     const badges = typeof sideBadges !== 'undefined' ? sideBadges : {};
+     items.forEach(([k,l,h]) => { const on = (h === '/owner' || h === '/admin') ? path === h : path.startsWith(h); const n = badges[l] || (l === 'Messages' ? unreadMessages : 0); %>
+    <a href="<%= h %>" class="<%= on ? 'on' : '' %>"><%- H.ic(k, 18) %><span><%= l %></span><% if (n) { %><i class="pip-n <%= l.startsWith('Viewing') ? 'warn' : '' %>"><%= n %></i><% } %></a>
+  <% }) %>
+  </nav>
+  <form method="post" action="/logout"><button class="sidenav-out" type="submit"><%- H.ic('logout', 18) %><span>Logout</span></button></form>
+</aside>
+<main class="main">
+<header class="deskhead">
+  <div><small class="muted"><%- typeof sub !== 'undefined' ? sub : '' %></small><h1><%= heading %></h1></div>
+  <div class="dh-right">
+    <%- typeof right !== 'undefined' ? right : '' %>
+    <a class="iconbtn" href="/notifications" aria-label="Notifications"><%- H.ic('bell', 20) %><% if (unreadNotes) { %><i class="pip"></i><% } %></a>
+    <a class="me" href="<%= user.role === 'admin' ? '/profile' : '/owner/profile' %>"><%- H.avatar(user, 36) %><div><b><%= user.name %></b><small><%= user.role === 'admin' ? 'Administrator' : 'Property Owner' %></small></div></a>
+  </div>
+</header>

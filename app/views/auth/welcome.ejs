@@ -1,0 +1,15 @@
+<%- include('../partials/web-open') %>
+<section class="hero-web">
+  <div>
+    <h1>Find your perfect room.<br>Live a better tomorrow.</h1>
+    <p>RoomStay connects renters with room and property owners. Search, chat, arrange a viewing and book. No deposit is handled on the platform.</p>
+    <div class="btn-row"><a class="btn primary" href="/register">Get Started</a><a class="btn outline" href="/login">Log In</a><a class="btn ghost" href="/home">Browse rooms first</a></div>
+  </div>
+  <img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=900&q=70" alt="" onerror="this.style.display='none'">
+</section>
+<div class="cards-grid">
+  <div class="card"><span class="mi"><%- H.ic('search', 18) %></span><h2 class="h2">Search and compare</h2><p class="body">Filter by area, rent, room type and facilities. Save the ones you like.</p></div>
+  <div class="card"><span class="mi"><%- H.ic('calendar', 18) %></span><h2 class="h2">Arrange a viewing</h2><p class="body">Pick a time. The owner approves, suggests another time, or declines with a reason.</p></div>
+  <div class="card"><span class="mi"><%- H.ic('check', 18) %></span><h2 class="h2">Book with confidence</h2><p class="body">The owner confirms your booking and the room is marked as yours. Review after your stay.</p></div>
+</div>
+<%- include('../partials/web-close') %>

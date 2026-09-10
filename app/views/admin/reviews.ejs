@@ -1,0 +1,9 @@
+<%- include('../partials/desk-open', { heading: 'Reviews', sub: rows.length + ' reviews' }) %>
+<div class="card">
+  <% if (!rows.length) { %><div class="empty"><b>No reviews yet</b></div><% } %>
+  <% rows.forEach(r => { %>
+  <div class="review card-row"><%- H.avatar(r.renter, 40) %><div><div class="rv-head"><b><%= r.renter ? r.renter.name : '' %></b><span class="stars"><%= H.stars(r.rating) %></span></div><small class="muted"><%= r.property ? r.property.title : '' %> · <%= H.fmtDate(r.createdAt) %><% if (r.hidden) { %> · <span class="badge bad">hidden</span><% } %></small><p><%= r.comment %></p></div>
+    <form method="post" action="/admin/reviews/<%= r.id %>/toggle"><button class="btn ghost xs <%= r.hidden ? '' : 'danger-text' %>" type="submit"><%= r.hidden ? 'Show' : 'Hide' %></button></form></div>
+  <% }) %>
+</div>
+<%- include('../partials/desk-close') %>

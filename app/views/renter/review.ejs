@@ -1,0 +1,16 @@
+<%- include('../partials/web-open') %>
+<div class="narrow">
+<%- include('../partials/topbar', { heading: 'Leave a Review', back: '/bookings/' + booking.id }) %>
+<% const p = booking.property; %>
+<form method="post" action="/bookings/<%= booking.id %>/review" style="display:contents">
+<div class="pad">
+  <div class="ctx-card"><img src="<%= p.photos[0] || '' %>" alt="" onerror="this.style.visibility='hidden'"><div><b><%= p.title %></b><small><%= p.location %></small><small>Stayed from <%= H.fmtDate(booking.moveInDate) %></small></div></div>
+  <div class="field"><span>Your rating</span>
+    <div class="rating-radio"><% [5,4,3,2,1].forEach(n => { %><input type="radio" id="r<%= n %>" name="rating" value="<%= n %>" <%= n === 5 ? 'checked' : '' %>><label for="r<%= n %>" title="<%= n %> stars">★</label><% }) %></div></div>
+  <label class="field"><span>Your review</span><textarea name="comment" rows="4" placeholder="How was the room and the owner?" required></textarea></label>
+  <div class="note info"><%- H.ic('shield', 16) %> Only renters with a completed booking can review, once per stay. Reviews are public on the listing.</div>
+</div>
+<div class="sticky-cta"><button class="btn primary block" type="submit">Publish review</button></div>
+</form>
+</div>
+<%- include('../partials/web-close') %>

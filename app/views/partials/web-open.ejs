@@ -1,0 +1,25 @@
+<%- include('head', { bodycls: 'web-body' }) %>
+<%- include('flash') %>
+<header class="topnav">
+  <div class="topnav-in">
+    <a class="logo-row" href="/home"><span class="logo"><%- H.ic('home', 22) %></span><div><b>RoomStay</b><small>Find. Rent. Belong.</small></div></a>
+    <form class="searchbox live topnav-search" action="/search" method="get"><%- H.ic('search', 18) %><input name="q" placeholder="Search by location, university, or keyword" value="<%= typeof q !== 'undefined' && q && q.q ? q.q : '' %>"></form>
+    <nav class="topnav-links">
+      <% const links = user && user.role === 'renter'
+           ? [['home','Home','/home'],['search','Search','/search'],['heart','Favorites','/favorites'],['chat','Messages','/messages'],['clipboard','Bookings','/bookings']]
+           : [['home','Home','/home'],['search','Search','/search']];
+         links.forEach(([k,l,h]) => { const on = h === '/home' ? path === '/home' : path.startsWith(h); %>
+      <a href="<%= h %>" class="<%= on ? 'on' : '' %>"><%- H.ic(k, 18) %><span><%= l %></span><% if (k === 'chat' && unreadMessages) { %><i class="tab-pip"><%= unreadMessages %></i><% } %></a>
+      <% }) %>
+    </nav>
+    <div class="topnav-right">
+      <% if (user) { %>
+        <a class="iconbtn" href="/notifications" aria-label="Notifications"><%- H.ic('bell', 20) %><% if (unreadNotes) { %><i class="pip"></i><% } %></a>
+        <a class="me" href="<%= user.role === 'owner' ? '/owner' : user.role === 'admin' ? '/admin' : '/profile' %>"><%- H.avatar(user, 34) %><div><b><%= user.name %></b><small><%= user.role === 'owner' ? 'Go to owner dashboard' : user.role === 'admin' ? 'Go to admin' : 'Renter' %></small></div></a>
+      <% } else { %>
+        <a class="btn ghost sm" href="/login">Log in</a><a class="btn primary sm" href="/register">Sign up</a>
+      <% } %>
+    </div>
+  </div>
+</header>
+<main class="web">

@@ -1,0 +1,24 @@
+<%- include('../partials/head', { bodycls: 'web-body' }) %>
+<%- include('../partials/flash') %>
+<div class="auth-wrap">
+  <div class="auth-side"><img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&q=70" alt="" onerror="this.style.display='none'"><div class="hero-fade"></div>
+    <div class="hero-brand"><span class="logo lg"><%- H.ic('home', 26) %></span><h1>RoomStay</h1><p>Join and find your new home</p></div></div>
+  <div class="auth-form"><div>
+    <h1 class="h1">Create Your Account</h1><p class="sub">It takes less than a minute</p>
+    <form method="post" action="/register">
+      <label class="field"><span>Full Name</span><div class="input"><%- H.ic('user', 18) %><input name="name" value="<%= form.name || '' %>" required autocomplete="name"></div></label>
+      <label class="field"><span>Email</span><div class="input"><%- H.ic('mail', 18) %><input type="email" name="email" value="<%= form.email || '' %>" required autocomplete="email"></div></label>
+      <label class="field"><span>Password</span><div class="input"><%- H.ic('lock', 18) %><input type="password" name="password" minlength="8" required autocomplete="new-password" placeholder="At least 8 characters"></div></label>
+      <div class="field"><span>I want to</span>
+        <div class="role-pick">
+          <label><input type="radio" name="role" value="renter" <%= form.role !== 'owner' ? 'checked' : '' %>><b>Rent a room</b>Search, book and review rooms</label>
+          <label><input type="radio" name="role" value="owner" <%= form.role === 'owner' ? 'checked' : '' %>><b>List my property</b>Publish rooms and manage bookings</label>
+        </div>
+      </div>
+      <label class="check"><input type="checkbox" name="agree" value="1" checked><span>I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></span></label>
+      <button class="btn primary block" type="submit">Sign Up</button>
+    </form>
+    <p class="fine center">Already have an account? <a href="/login">Log in</a></p>
+  </div></div>
+</div>
+<%- include('../partials/foot') %>

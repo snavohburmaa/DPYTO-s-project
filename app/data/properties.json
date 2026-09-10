@@ -1,0 +1,234 @@
+[
+  {
+    "id": 1,
+    "ownerId": 2,
+    "title": "Cozy Condo Near BTS",
+    "type": "Condo",
+    "location": "Ari, Bangkok",
+    "address": "45 Phahon Yothin 7, Phaya Thai, Bangkok 10400",
+    "monthlyRent": 10000,
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "sizeSqm": 30,
+    "facilities": [
+      "wifi",
+      "aircon",
+      "furnished",
+      "elevator",
+      "pets"
+    ],
+    "description": "A cozy and comfortable condo near BTS Ari. Fully furnished with bed, wardrobe, desk, air conditioner, and free Wi-Fi. Suitable for students and working professionals.",
+    "photos": [
+      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=900&q=70",
+      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=900&q=70",
+      "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=900&q=70"
+    ],
+    "status": "Available",
+    "listingStatus": "published",
+    "availableFrom": "2026-09-20T15:43:25.038Z",
+    "views": 245,
+    "featured": true,
+    "createdAt": "2026-07-12T15:43:25.038Z"
+  },
+  {
+    "id": 2,
+    "ownerId": 2,
+    "title": "Modern Studio",
+    "type": "Condo",
+    "location": "Phahon Yothin, Bangkok",
+    "address": "123 Phahon Yothin Rd, Chatuchak, Bangkok 10900",
+    "monthlyRent": 8500,
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "sizeSqm": 25,
+    "facilities": [
+      "wifi",
+      "aircon",
+      "furnished",
+      "security"
+    ],
+    "description": "Modern and cozy studio near BTS. Fully furnished with bed, wardrobe, desk, air conditioner and free Wi-Fi.",
+    "photos": [
+      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=900&q=70",
+      "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=900&q=70"
+    ],
+    "status": "Reserved",
+    "listingStatus": "published",
+    "availableFrom": "2026-09-30T15:43:25.038Z",
+    "views": 312,
+    "createdAt": "2026-07-17T15:43:25.038Z"
+  },
+  {
+    "id": 3,
+    "ownerId": 2,
+    "title": "Spacious Apartment",
+    "type": "Apartment",
+    "location": "Chatuchak, Bangkok",
+    "address": "9 Ratchadaphisek 3, Chatuchak, Bangkok 10900",
+    "monthlyRent": 12000,
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "sizeSqm": 20,
+    "facilities": [
+      "wifi",
+      "aircon",
+      "parking",
+      "elevator"
+    ],
+    "description": "Bright apartment with a large window, 5 minutes to MRT Chatuchak Park. Quiet building with 24 hour security.",
+    "photos": [
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=900&q=70",
+      "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=900&q=70"
+    ],
+    "status": "Rented",
+    "listingStatus": "published",
+    "availableFrom": "2026-08-11T15:43:25.038Z",
+    "views": 199,
+    "createdAt": "2026-07-22T15:43:25.038Z",
+    "updatedAt": "2026-09-10T15:53:12.256Z"
+  },
+  {
+    "id": 4,
+    "ownerId": 2,
+    "title": "Condo One Bedroom",
+    "type": "Condo",
+    "location": "Sukhumvit, Bangkok",
+    "address": "88 Sukhumvit 24, Khlong Toei, Bangkok 10110",
+    "monthlyRent": 15000,
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "sizeSqm": 35,
+    "facilities": [
+      "wifi",
+      "aircon",
+      "furnished",
+      "gym",
+      "pool"
+    ],
+    "description": "One bedroom condo with pool and gym, walking distance to BTS Phrom Phong.",
+    "photos": [
+      "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=900&q=70",
+      "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=900&q=70"
+    ],
+    "status": "Unavailable",
+    "listingStatus": "draft",
+    "availableFrom": "2026-10-25T15:43:25.038Z",
+    "views": 0,
+    "createdAt": "2026-09-05T15:43:25.038Z"
+  },
+  {
+    "id": 5,
+    "ownerId": 2,
+    "title": "Luxury Room",
+    "type": "Room",
+    "location": "Asoke, Bangkok",
+    "address": "12 Sukhumvit 21, Watthana, Bangkok 10110",
+    "monthlyRent": 18000,
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "sizeSqm": 28,
+    "facilities": [
+      "wifi",
+      "aircon",
+      "furnished",
+      "elevator",
+      "security",
+      "gym"
+    ],
+    "description": "Premium room in a new building at Asoke. City view, high floor, fully furnished.",
+    "photos": [
+      "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=900&q=70",
+      "https://images.unsplash.com/photo-1554995207-c18c203602cb?w=900&q=70"
+    ],
+    "status": "Available",
+    "listingStatus": "published",
+    "availableFrom": "2026-09-13T15:43:25.038Z",
+    "views": 176,
+    "featured": true,
+    "createdAt": "2026-08-11T15:43:25.038Z"
+  },
+  {
+    "id": 6,
+    "ownerId": 6,
+    "title": "Garden House",
+    "type": "House",
+    "location": "Ladprao, Bangkok",
+    "address": "210 Ladprao 41, Chatuchak, Bangkok 10900",
+    "monthlyRent": 15000,
+    "bedrooms": 2,
+    "bathrooms": 1,
+    "sizeSqm": 48,
+    "facilities": [
+      "wifi",
+      "parking",
+      "pets",
+      "furnished"
+    ],
+    "description": "Two bedroom house with a small garden. Parking for one car. Pets welcome.",
+    "photos": [
+      "https://images.unsplash.com/photo-1484154218962-a197022b5858?w=900&q=70",
+      "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=900&q=70"
+    ],
+    "status": "Available",
+    "listingStatus": "published",
+    "availableFrom": "2026-09-17T15:43:25.038Z",
+    "views": 88,
+    "createdAt": "2026-08-16T15:43:25.038Z"
+  },
+  {
+    "id": 7,
+    "ownerId": 6,
+    "title": "Student Room near Kasetsart",
+    "type": "Room",
+    "location": "Kasetsart, Bangkok",
+    "address": "5 Ngamwongwan 2, Chatuchak, Bangkok 10900",
+    "monthlyRent": 5500,
+    "bedrooms": 1,
+    "bathrooms": 1,
+    "sizeSqm": 22,
+    "facilities": [
+      "wifi",
+      "aircon"
+    ],
+    "description": "Budget room 5 minutes from Kasetsart University. Shared laundry on the ground floor.",
+    "photos": [
+      "https://images.unsplash.com/photo-1554995207-c18c203602cb?w=900&q=70",
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=900&q=70"
+    ],
+    "status": "Available",
+    "listingStatus": "published",
+    "availableFrom": "2026-09-11T15:43:25.038Z",
+    "views": 140,
+    "createdAt": "2026-08-21T15:43:25.038Z"
+  },
+  {
+    "id": 8,
+    "ownerId": 7,
+    "title": "Riverside Loft",
+    "type": "Apartment",
+    "location": "Charoen Krung, Bangkok",
+    "address": "30 Charoen Krung 30, Bang Rak, Bangkok 10500",
+    "monthlyRent": 22000,
+    "bedrooms": 2,
+    "bathrooms": 2,
+    "sizeSqm": 70,
+    "facilities": [
+      "wifi",
+      "aircon",
+      "furnished",
+      "parking",
+      "pool"
+    ],
+    "description": "Loft apartment by the river. Photos may not match the current furniture.",
+    "photos": [
+      "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=900&q=70",
+      "https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=900&q=70"
+    ],
+    "status": "Available",
+    "listingStatus": "published",
+    "availableFrom": "2026-09-12T15:43:25.038Z",
+    "views": 41,
+    "createdAt": "2026-08-26T15:43:25.038Z",
+    "updatedAt": "2026-09-10T15:47:10.184Z"
+  }
+]
